@@ -1,5 +1,5 @@
 ## --------------------------------------------------------------------
-## Program: mod_getData1.R
+## Program: mod_getData2.R
 ## Date: 06/08/2019
 ## Author: bwang4
 ## Project: SMA Shiny
@@ -8,108 +8,87 @@
 ## Output: single dataset
 ## --------------------------------------------------------------------
 
-source("R/global.R")
 
-
-getDataUI<-function(id){
+getData2UI<-function(id){
 
   ns<-NS(id)
 
   fluidPage(
-    selectInput(ns("dataset"), "Select a dataset", choices=c("iris", "mtcars")),
+    selectInput(ns("dataset"), "Select a dataset", choices=c("iris", "mtcars"),
+                selected = c("iris"), multiple = TRUE),
 
     strong("OR"),
+    br(),
     br(),
 
     fileInput(ns("userFile"), label="Upload file",
               buttonLabel="Upload", placeholder="CSV - Excel - RDS - SAS",
-              multiple=FALSE, accept=c(".csv", ".xlsx", ".rds", ".sas7bdat")),
+              multiple=TRUE, accept=c(".csv", ".xlsx", ".rds", ".sas7bdat"))#,
 
-    uiOutput(ns("sheetUI"))
+    #uiOutput(ns("sheetUI"))
   )
 
 }
 
 
 
-getData<-function(input, output, session){
+getData2<-function(input, output, session, URID = FALSE, tbl = TRUE){
 
-  dataHere<-reactiveValues(data=NULL,
-                           sampleData=NULL,
-                           uploadData=NULL)
+  dataHere<-reactiveValues(data=NULL, sampleData=NULL, uploadData=NULL)
 
+
+  # get sample data ---------------------------------------------------------
   observe(priority = 10, {
-
     req(input$dataset)
-
-    dataHere$sampleData<-lapply(c("mtcars", "iris"), function(txt)eval(parse(text=txt)))
-
+    dataHere$sampleData<-lapply(input$dataset, function(df)eval(parse(text = df)))
   })
 
 
-  sheets<-eventReactive(input$userFile, {
-
-    if(!is.null(input$userFile)){
-
-      file_ext <- toupper(regmatches(input$userFile$name, regexpr(input$userFile$name, pattern='\\.(.+)$')))
-      ext_i <- match(file_ext, c('.CSV', '.XLS', '.XLSX', '.RDS'))
-
-      if(!is.na(ext_i)&ext_i%in%2:3)
-        excel_sheets(input$userFile$datapath)
-    }
-  })
-
-  output$sheetUI<-renderUI({
-    ns<-session$ns
-
-    if(!is.null(input$userFile)){
-
-      file_ext <- toupper(regmatches(input$userFile$name, regexpr(input$userFile$name, pattern='\\.(.+)$')))
-      ext_i <- match(file_ext, c('.CSV', '.XLS', '.XLSX', '.RDS'))
-
-      if(!is.na(ext_i)&ext_i%in%2:3)
-        selectInput(ns("sheet"), "Choose sheet (only for .xlsx)", choices = sheets())
-    }
+  # get file extension ------------------------------------------------------
+  ext <- eventReactive(input$userFile, {
+    file_ext <- toupper(regmatches(input$userFile$name, regexpr(input$userFile$name, pattern='\\.(.+)$')))
+    match(file_ext, c('.CSV', '.XLS', '.XLSX', '.RDS', '.SAS7BDAT'))
   })
 
 
+  # # excel sheet UI ----------------------------------------------------------
+  # sheets<-eventReactive(input$userFile, {
+  #   if(!is.na(ext()) & ext()%in%2:3) excel_sheets(input$userFile$datapath)
+  # })
+  #
+  # output$sheetUI<-renderUI({
+  #   ns<-session$ns
+  #   if(!is.na(ext()) & ext()%in%2:3) selectInput(ns("sheet"), "Choose sheet (only for .xlsx)", choices = sheets())
+  # })
+
+  # load rds and csv ---------------------------------------------------------
   observeEvent(input$userFile, priority = 10, {
 
-    file_ext <- toupper(regmatches(input$userFile$name, regexpr(input$userFile$name, pattern='\\.(.+)$')))
+    if (!is.na(ext()))
+      if(ext() == 4) { ## rds
+        dataHere$uploadData <- readRDS(input$userFile$datapath) %>% as.data.frame()
 
-    ext_i <- match(file_ext, c('.CSV', '.XLS', '.XLSX', '.RDS'))
-
-    if (!is.na(ext_i))
-      if (ext_i > 3) {
-        dataHere$uploadData <- readRDS(input$userFile$datapath) %>% as.data.frame() # %>% stringsAsFactors()
-      } else if (ext_i == 1) {
-        #read_FUN <- if (ext_i == 1) { read_csv } else { read_excel }
+      }else if(ext() == 1) { ## csv
 
         dataHere$uploadData <- suppressWarnings(read_csv(input$userFile$datapath, col_names = TRUE,
                                                          trim_ws = FALSE, guess_max = 1000, na=c('', '-', 'NA', 'NULL'))) %>%
-          as.data.frame() #%>% stringsAsFactors()
+          as.data.frame()
 
+      }else if(ext() == 5) { ## sas
+        dataHere$uploadData <- haven::read_sas(input$userFile$datapath) %>% as.data.frame()
       }
 
   })
 
-
-
+  # load excel --------------------------------------------------------------
   observe({
     if(!is.null(input$userFile)){
 
-      file_ext <- toupper(regmatches(input$userFile$name, regexpr(input$userFile$name, pattern='\\.(.+)$')))
-
-      ext_i <- match(file_ext, c('.CSV', '.XLS', '.XLSX', '.RDS'))
-
-      if (!is.na(ext_i) & ext_i %in% 2:3)
+      if (!is.na(ext()) & ext() %in% 2:3)
 
         dataHere$uploadData <- suppressWarnings(read_excel(input$userFile$datapath, col_names = TRUE, sheet = input$sheet,
-                                                           trim_ws = FALSE, guess_max = 1000, na=c('', '-', 'NA', 'NULL')#,
-                                                           #.name_repair = "unique"
-        )) %>%
-        as.data.frame()
-
+                                                           trim_ws = FALSE, guess_max = 1000, na=c('', '-', 'NA', 'NULL'))) %>%
+          as.data.frame()
 
     }
 
@@ -118,50 +97,56 @@ getData<-function(input, output, session){
 
 
 
+  # everytime sample data updates overwrite dataHere$data to sample data -------------
   observeEvent(input$dataset, {
-    dataHere$data<-dataHere$sampleData %>% mutate(URID=1:n())
+    ## add URID if needed
+    dataHere$data<-lapply(as.list(input$dataset), function(df) if(URID) df %>% mutate(URID = 1:n()) else df)
+  })
+
+
+  # otherwise uoloadData set as dataHere$data
+  observe({
+    if(!is.null(dataHere$uploadData)){
+      dataHere$data<-if(URID) dataHere$uploadData %>% mutate(URID=1:n()) else dataHere$uploadData
+    }
+  })
+
+  return(reactive(lapply(dataHere$data, function(df) if(tbl) as_tibble(df) else df)))
+
+}
+
+## demo
+ui<-fluidPage(
+  fluidRow(
+    column(width=4, getData2UI("getData")),
+    column(width=8,
+           textOutput("class"),
+           verbatimTextOutput("tmp"),
+           uiOutput("data"))
+  )
+)
+
+server<-function(input, output, session){
+  data<-callModule(getData2, "getData")
+
+  output$tmp <- renderPrint(data())
+
+  output$data<-renderUI({
+    lapply(as.list(seq_along(input$dataset)), function(i) {
+      id <- paste0("data", i)
+      DT::dataOutput(id)
+    })
   })
 
   observe({
-    if(!is.null(dataHere$uploadData)){
-      data_cleanname<-dataHere$uploadData
-      names(data_cleanname)<-gsub(" ", "_", names(data_cleanname))
-      names(data_cleanname)<-gsub("-", "_", names(data_cleanname))
-      names(data_cleanname)<-gsub("%", "P_", names(data_cleanname))
-      #data_cleanname<-as.data.frame(lapply(data_cleanname, function(v)gsub("/", ".", v)))
-      #data_cleanname<-as.data.frame(lapply(data_cleanname, function(v)gsub("[a-zA-Z]+-[a-zA-Z]", ".", v)))
-
-      dataHere$data<-data_cleanname %>% mutate(URID=1:n())
-    }
+  for (i in seq_along(input$dataset)) {
+    id <- paste0("data", i)
+    output[[id]] <- DT::renderDataTable(data()[[i]])
+  }
   })
 
-  return(reactive(dataHere$data))
 
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-ui<-fluidPage(
-  getData1UI("stack")
-)
-
-sever<-function(input, output, session){
-  callModule(getData1, "stack")
+  #output$class <- renderText(class(data()))
 }
 
 shinyApp(ui, server)
-
-
-
-
