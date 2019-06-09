@@ -1,6 +1,12 @@
-library(readr)
-library(readxl)
-library(data.table)
+## --------------------------------------------------------------------
+## Program: mod_getData1.R
+## Date: 06/08/2019
+## Author: bwang4
+## Project: SMA Shiny
+## Purpose: Shiny module for getting single dataset
+## Input: path, pattern
+## Output: single dataset
+## --------------------------------------------------------------------
 
 getData1UI<-function(id){
 
@@ -14,8 +20,8 @@ getData1UI<-function(id){
     br(),
 
     fileInput(ns("userFile"), label="Upload file",
-              buttonLabel="Upload", placeholder="CSV - Excel - RDS",
-              multiple=FALSE, accept=c(".csv", ".xlsx", ".rds")),
+              buttonLabel="Upload", placeholder="CSV - Excel - RDS - SAS",
+              multiple=FALSE, accept=c(".csv", ".xlsx", ".rds", ".sas7bdat")),
 
     uiOutput(ns("sheetUI"))
   )
@@ -24,7 +30,7 @@ getData1UI<-function(id){
 
 
 
-getData1<-function(input, output, session){
+getData1<-function(input, output, session, URID = FALSE, tbl = TRUE){
 
   dataHere<-reactiveValues(data=NULL, sampleData=NULL, uploadData=NULL)
 
@@ -39,7 +45,7 @@ getData1<-function(input, output, session){
   # get file extension ------------------------------------------------------
   ext <- eventReactive(input$userFile, {
     file_ext <- toupper(regmatches(input$userFile$name, regexpr(input$userFile$name, pattern='\\.(.+)$')))
-    match(file_ext, c('.CSV', '.XLS', '.XLSX', '.RDS'))
+    match(file_ext, c('.CSV', '.XLS', '.XLSX', '.RDS', '.SAS7BDAT'))
   })
 
 
@@ -66,6 +72,8 @@ getData1<-function(input, output, session){
                                                          trim_ws = FALSE, guess_max = 1000, na=c('', '-', 'NA', 'NULL'))) %>%
           as.data.frame()
 
+      }else if(ext() == 5) { ## sas
+        dataHere$uploadData <- haven::read_sas(input$userFile$datapath) %>% as.data.frame()
       }
 
   })
@@ -89,18 +97,19 @@ getData1<-function(input, output, session){
 
   # everytime sample data updates overwrite dataHere$data to sample data -------------
   observeEvent(input$dataset, {
-    dataHere$data<-dataHere$sampleData %>% mutate(URID=1:n())
+    ## add URID if needed
+    dataHere$data<-if(URID) dataHere$sampleData %>% mutate(URID=1:n()) else dataHere$sampleData
   })
 
 
   # otherwise uoloadData set as dataHere$data
   observe({
     if(!is.null(dataHere$uploadData)){
-      dataHere$data<-dataHere$uploadData %>% mutate(URID=1:n())
+      dataHere$data<-if(URID) dataHere$uploadData %>% mutate(URID=1:n()) else dataHere$uploadData
     }
   })
 
-  return(reactive(dataHere$data))
+  return(reactive(if(tbl) as_tibble(dataHere$data) else dataHere$data))
 
 }
 
@@ -108,16 +117,18 @@ getData1<-function(input, output, session){
 ui<-fluidPage(
   fluidRow(
     column(width=4, getData1UI("getData")),
-    column(width=8, tableOutput("data"))
+    column(width=8,
+           textOutput("class"),
+           tableOutput("data"))
   )
 )
 
 server<-function(input, output, session){
   data<-callModule(getData1, "getData")
 
-  output$data<-renderTable({
-    data()
-  })
+  output$data<-renderTable(data())
+
+  output$class <- renderText(class(data()))
 }
 
 shinyApp(ui, server)
