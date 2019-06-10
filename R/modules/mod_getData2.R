@@ -1,11 +1,12 @@
 ## --------------------------------------------------------------------
 ## Program: mod_getData2.R
-## Date: 06/08/2019
+## Date: 06/09/2019
 ## Author: bwang4
 ## Project: SMA Shiny
-## Purpose: Shiny module for getting single dataset
-## Input: path, pattern
-## Output: single dataset
+## Purpose: Shiny module for getting datasets of same format
+## Input:
+## Output: list of datasets
+## Note: only take first sheet of Excel by default
 ## --------------------------------------------------------------------
 
 
@@ -23,9 +24,7 @@ getData2UI<-function(id){
 
     fileInput(ns("userFile"), label="Upload file",
               buttonLabel="Upload", placeholder="CSV - Excel - RDS - SAS",
-              multiple=TRUE, accept=c(".csv", ".xlsx", ".rds", ".sas7bdat"))#,
-
-    #uiOutput(ns("sheetUI"))
+              multiple=TRUE, accept=c(".csv", ".xlsx", ".rds", ".sas7bdat"))
   )
 
 }
@@ -46,36 +45,27 @@ getData2<-function(input, output, session, URID = FALSE, tbl = TRUE){
 
   # get file extension ------------------------------------------------------
   ext <- eventReactive(input$userFile, {
-    file_ext <- toupper(regmatches(input$userFile$name, regexpr(input$userFile$name, pattern='\\.(.+)$')))
+    file_ext <- toupper(regmatches(input$userFile$name[1], regexpr(input$userFile$name[1], pattern='\\.(.+)$')))
     match(file_ext, c('.CSV', '.XLS', '.XLSX', '.RDS', '.SAS7BDAT'))
   })
 
-
-  # # excel sheet UI ----------------------------------------------------------
-  # sheets<-eventReactive(input$userFile, {
-  #   if(!is.na(ext()) & ext()%in%2:3) excel_sheets(input$userFile$datapath)
-  # })
-  #
-  # output$sheetUI<-renderUI({
-  #   ns<-session$ns
-  #   if(!is.na(ext()) & ext()%in%2:3) selectInput(ns("sheet"), "Choose sheet (only for .xlsx)", choices = sheets())
-  # })
 
   # load rds and csv ---------------------------------------------------------
   observeEvent(input$userFile, priority = 10, {
 
     if (!is.na(ext()))
       if(ext() == 4) { ## rds
-        dataHere$uploadData <- readRDS(input$userFile$datapath) %>% as.data.frame()
+        dataHere$uploadData <- lapply(input$userFile$datapath, function(path) readRDS(path) %>% as.data.frame())
 
       }else if(ext() == 1) { ## csv
 
-        dataHere$uploadData <- suppressWarnings(read_csv(input$userFile$datapath, col_names = TRUE,
-                                                         trim_ws = FALSE, guess_max = 1000, na=c('', '-', 'NA', 'NULL'))) %>%
-          as.data.frame()
+        dataHere$uploadData <- lapply(input$userFile$datapath, function(path) {
+                                      suppressWarnings(read_csv(input$userFile$datapath, col_names = TRUE,
+                                                                trim_ws = FALSE, guess_max = 1000, na=c('', '-', 'NA', 'NULL')))
+                                      }) %>% as.data.frame()
 
       }else if(ext() == 5) { ## sas
-        dataHere$uploadData <- haven::read_sas(input$userFile$datapath) %>% as.data.frame()
+        dataHere$uploadData <- lapply(input$userFile$datapath, function(path) haven::read_sas(path) %>% as.data.frame())
       }
 
   })
@@ -86,10 +76,10 @@ getData2<-function(input, output, session, URID = FALSE, tbl = TRUE){
 
       if (!is.na(ext()) & ext() %in% 2:3)
 
-        dataHere$uploadData <- suppressWarnings(read_excel(input$userFile$datapath, col_names = TRUE, sheet = input$sheet,
-                                                           trim_ws = FALSE, guess_max = 1000, na=c('', '-', 'NA', 'NULL'))) %>%
-          as.data.frame()
-
+        dataHere$uploadData <- lapply(input$userFile$datapath, function(path) {
+                                      suppressWarnings(read_csv(input$userFile$datapath, col_names = TRUE,
+                                                                trim_ws = FALSE, guess_max = 1000, na=c('', '-', 'NA', 'NULL')))
+                                     }) %>% as.data.frame()
     }
 
   })
@@ -100,18 +90,19 @@ getData2<-function(input, output, session, URID = FALSE, tbl = TRUE){
   # everytime sample data updates overwrite dataHere$data to sample data -------------
   observeEvent(input$dataset, {
     ## add URID if needed
-    dataHere$data<-lapply(as.list(input$dataset), function(df) if(URID) df %>% mutate(URID = 1:n()) else df)
+    dataHere$data<-lapply(dataHere$sampleData, function(df) if(URID) df %>% mutate(URID = 1:n()) else df)
   })
 
 
   # otherwise uoloadData set as dataHere$data
   observe({
     if(!is.null(dataHere$uploadData)){
-      dataHere$data<-if(URID) dataHere$uploadData %>% mutate(URID=1:n()) else dataHere$uploadData
+      dataHere$data<-lapply(dataHere$uploadData, function(df) if(URID) df %>% mutate(URID = 1:n()) else df)
     }
   })
 
   return(reactive(lapply(dataHere$data, function(df) if(tbl) as_tibble(df) else df)))
+  #return(reactive(dataHere$data))
 
 }
 
@@ -121,8 +112,8 @@ ui<-fluidPage(
     column(width=4, getData2UI("getData")),
     column(width=8,
            textOutput("class"),
-           verbatimTextOutput("tmp"),
-           uiOutput("data"))
+           #uiOutput("dt"),
+           verbatimTextOutput("tmp"))
   )
 )
 
@@ -131,20 +122,21 @@ server<-function(input, output, session){
 
   output$tmp <- renderPrint(data())
 
-  output$data<-renderUI({
-    lapply(as.list(seq_along(input$dataset)), function(i) {
-      id <- paste0("data", i)
-      DT::dataOutput(id)
-    })
-  })
-
-  observe({
-  for (i in seq_along(input$dataset)) {
-    id <- paste0("data", i)
-    output[[id]] <- DT::renderDataTable(data()[[i]])
-  }
-  })
-
+  # output$dt<-renderUI({
+  #   lapply(as.list(seq_along(data())), function(i) {
+  #     id <- paste0("dt", i)
+  #     tableOutput(id)
+  #   })
+  # })
+  #
+  # observe({
+  #   counter <- 0
+  #     for (i in seq_along(data())) {
+  #       id <- paste0("dt", i)
+  #       counter <- counter + 1
+  #       output[[id]] <- renderTable(data()[[counter]])
+  #     }
+  # })
 
   #output$class <- renderText(class(data()))
 }

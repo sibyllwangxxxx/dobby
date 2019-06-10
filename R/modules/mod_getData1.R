@@ -4,7 +4,7 @@
 ## Author: bwang4
 ## Project: SMA Shiny
 ## Purpose: Shiny module for getting single dataset
-## Input: path, pattern
+## Input:
 ## Output: single dataset
 ## --------------------------------------------------------------------
 
