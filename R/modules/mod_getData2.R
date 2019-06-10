@@ -120,7 +120,7 @@ ui<-fluidPage(
 server<-function(input, output, session){
   data<-callModule(getData2, "getData")
 
-  output$tmp <- renderPrint(data())
+  output$tmp <- renderPrint(col_party(data()))
 
   # output$dt<-renderUI({
   #   lapply(as.list(seq_along(data())), function(i) {
