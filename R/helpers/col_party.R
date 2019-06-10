@@ -1,3 +1,13 @@
+## --------------------------------------------------------------------
+## Program: col_party.R
+## Date: 06/10/2019
+## Author: bwang4
+## Project: dobby
+## Purpose: Get variable names of a list of datasets
+## Input path:
+## Output path:
+## --------------------------------------------------------------------
+
 col_party <- function(...){
 
   # dots_values() and flatten found in bind_rows()
