@@ -59,6 +59,7 @@ ui<-fluidPage(
 server<-function(input, output, session){
   data_list <- reactive(callModule(getData2, "getData"))
   callModule(variableInfo, "varInfo", data_lst = data_list())
+  #callModule(variableInfo, "varInfo", data_lst = reactive(list(mtcars, iris)))
 }
 
 shinyApp(ui, server)

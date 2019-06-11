@@ -102,7 +102,6 @@ getData2<-function(input, output, session, URID = FALSE, tbl = TRUE){
   })
 
   return(reactive(lapply(dataHere$data, function(df) if(tbl) as_tibble(df) else df)))
-  #return(reactive(dataHere$data))
 
 }
 
