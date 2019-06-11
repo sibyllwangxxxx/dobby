@@ -28,8 +28,6 @@ variableInfo <- function(input, output, session, data_lst){
                tableOutput(ns(id))
       )
     })
-    #https://stackoverflow.com/questions/39276104/r-shiny-how-to-add-data-tables-to-dynamically-created-tabs
-    #do.call(tabsetPanel, myTabs)
     do.call(shinydashboard::tabBox, myTabs)
   })
 
@@ -40,7 +38,7 @@ variableInfo <- function(input, output, session, data_lst){
         j <- i
         id <- paste0("varsInfo", j)
           output[[id]] <- renderTable({
-            varInfo(data_lst()[[j]], lab = F, uniq = T, miss = T, misschar = c("", " "))
+            varInfo(data_lst()[[j]], lab = T, uniq = T, miss = T, misschar = c("", " "))
           })
       })
     }

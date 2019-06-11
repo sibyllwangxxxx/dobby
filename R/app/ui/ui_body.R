@@ -1,22 +1,17 @@
 ui_body <- function(){
-  bs4DashBody(
-    bs4TabItems(
-      bs4TabItem(
+  dashboardBody(
+    tabItems(
+
+      tabItem(
         tabName = "item1",
-            bs4Box(
-              height = "1200px",
-              title = "Variables, number of unique values, missing",
-              fluidRow(
-              variableInfoUI("varInfo"))
-            )
+        fluidRow(
+          box(title = "Upload datasets", width = 3, status = "success", getData2UI("getData")),
+          box(title = "Variables in datasets", width = 9, status = "info", variableInfoUI("varInfo"))
+        )
       ),
 
-    bs4TabItem(
+    tabItem(
       tabName = "item2"
-    ),
-
-    bs4TabItem(
-      tabName = "item3"
     )
 
     )

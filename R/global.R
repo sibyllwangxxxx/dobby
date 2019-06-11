@@ -8,6 +8,7 @@ library(bs4Dash)
 library(shinydashboard)
 
 library(NCmisc) ## checkPackages.R
+library(Hmisc)
 
 library(readr)
 library(readxl)
@@ -18,5 +19,5 @@ library(haven)
 
 # source all helper files -------------------------------------------------
 
-lapply(paste0("~/dobby/R/helpers/", list.files("~/dobby/R/helpers/")), source)
+lapply(paste0("C:/Users/bwang4/dobby/R/helpers/", list.files("C:/Users/bwang4/dobby/R/helpers/")), source)
 

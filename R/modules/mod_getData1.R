@@ -13,7 +13,7 @@ getData1UI<-function(id){
   ns<-NS(id)
 
   fluidPage(
-    selectInput(ns("dataset"), "Select a dataset", choices=c("iris", "mtcars")),
+    selectInput(ns("dataset"), "Select a dataset", choices=c("iris", "mtcars", "USArrests")),
 
     strong("OR"),
     br(),
@@ -38,7 +38,7 @@ getData1<-function(input, output, session, URID = FALSE, tbl = TRUE){
   # get sample data ---------------------------------------------------------
   observe(priority = 10, {
     req(input$dataset)
-    dataHere$sampleData<-switch(input$dataset, "mtcars"=mtcars, "iris"=iris)
+    dataHere$sampleData<-switch(input$dataset, "mtcars"=mtcars, "iris"=iris, "USArrests" = USArrests)
   })
 
 

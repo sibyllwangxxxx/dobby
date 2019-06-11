@@ -1,17 +1,10 @@
-source("~/dobby/R/global.R")
-lapply(paste0("~/dobby/R/app/ui/", list.files("~/dobby/R/app/ui/")), source)
-lapply(paste0("~/dobby/R/modules/", list.files("~/dobby/R/modules/")), source)
+source("C:/Users/bwang4/dobby/R/global.R")
+lapply(paste0("C:/Users/bwang4/dobby/R/app/ui/", list.files("C:/Users/bwang4/dobby/R/app/ui/")), source)
+lapply(paste0("C:/Users/bwang4/dobby/R/modules/", list.files("C:/Users/bwang4/dobby/R/modules/")), source)
 
-ui <- bs4DashPage(
-  old_school = FALSE,
-  sidebar_collapsed = TRUE,
-  controlbar_collapsed = FALSE,
-  title = "Basic Dashboard",
-  #navbar = ui_navbar(),
-  navbar = bs4DashNavbar(),
+ui <- dashboardPage(
+  header = dashboardHeader(title = "Biomarker explorer"),
   sidebar = ui_sidebar(),
-  controlbar = ui_rightbar(),
-  footer = ui_footer(),
   body = ui_body()
 )
 

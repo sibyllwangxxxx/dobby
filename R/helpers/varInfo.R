@@ -20,7 +20,7 @@ varInfo <- function(df, lab = FALSE, uniq = FALSE, miss = FALSE, misschar = NULL
 
   if(!is.null(df)){
     tb <- tibble(names = names(df))
-    tb <- if(lab) tb %>% mutate(labels = sapply(df, function(col)attr(col, "label"))) else tb
+    tb <- if(lab) tb %>% mutate(labels = unlist(sapply(df, function(col)attr(col, "label")))) else tb
     tb <- if(uniq) tb %>% mutate(`unique values` = sapply(df, function(col)length(unique(col)))) else tb
     tb <- if(miss) tb %>% mutate(`percent missing` = sapply(df, function(col)paste0(round(pmiss(col, misschar = misschar)*100, 3), "%"))) else tb
   }
@@ -29,4 +29,7 @@ varInfo <- function(df, lab = FALSE, uniq = FALSE, miss = FALSE, misschar = NULL
 }
 
 if(FALSE)
-  varInfo(mtcars, F, T, T, c("", " ")) %>% View()
+  varInfo(mtcars, T, T, T, c("", " ")) %>% View()
+
+if(FALSE)
+  varInfo(nars201_bm1, T, T, T, c("", " ")) %>% View()

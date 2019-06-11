@@ -15,7 +15,7 @@ getData2UI<-function(id){
   ns<-NS(id)
 
   fluidPage(
-    selectInput(ns("dataset"), "Select a dataset", choices=c("iris", "mtcars"),
+    selectInput(ns("dataset"), "Select a dataset", choices=c("iris", "mtcars", "USArrests"),
                 selected = c("iris"), multiple = TRUE),
 
     strong("OR"),
@@ -123,23 +123,6 @@ server<-function(input, output, session){
 
   output$tmp <- renderPrint(data())
 
-  # output$dt<-renderUI({
-  #   lapply(as.list(seq_along(data())), function(i) {
-  #     id <- paste0("dt", i)
-  #     tableOutput(id)
-  #   })
-  # })
-  #
-  # observe({
-  #   counter <- 0
-  #     for (i in seq_along(data())) {
-  #       id <- paste0("dt", i)
-  #       counter <- counter + 1
-  #       output[[id]] <- renderTable(data()[[counter]])
-  #     }
-  # })
-
-  #output$class <- renderText(class(data()))
 }
 
 shinyApp(ui, server)
