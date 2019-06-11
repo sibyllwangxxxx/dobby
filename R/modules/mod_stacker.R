@@ -26,7 +26,7 @@ stacker <- function(input, output, session, path){
 }
 
 
-
+if(FALSE){
 ui<-fluidPage(
   stackerUI("stack")
 )
@@ -36,7 +36,7 @@ sever<-function(input, output, session){
 }
 
 shinyApp(ui, server)
-
+}
 
 
 

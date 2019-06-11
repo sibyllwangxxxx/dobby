@@ -45,14 +45,11 @@ variableInfo <- function(input, output, session, data_lst){
     }
   })
 
-
-
-
-
-
 }
 
 
+
+if(FALSE){
 ui<-fluidPage(
   variableInfoUI("varInfo")
 )
@@ -63,7 +60,4 @@ server<-function(input, output, session){
 
 shinyApp(ui, server)
 
-
-
-
-
+}

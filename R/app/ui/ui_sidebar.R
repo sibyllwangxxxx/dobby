@@ -2,7 +2,7 @@ ui_sidebar <- function(){
   bs4DashSidebar(
   skin = "light",
   status = "primary",
-  title = "bs4Dash",
+  title = "Biomarker exploratory",
   brandColor = "primary",
   # url = "https://www.google.fr",
   # src = "https://adminlte.io/themes/AdminLTE/dist/img/user2-160x160.jpg",

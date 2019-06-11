@@ -107,6 +107,7 @@ getData2<-function(input, output, session, URID = FALSE, tbl = TRUE){
 }
 
 ## demo
+if(FALSE){
 ui<-fluidPage(
   fluidRow(
     column(width=4, getData2UI("getData")),
@@ -142,3 +143,4 @@ server<-function(input, output, session){
 }
 
 shinyApp(ui, server)
+}
