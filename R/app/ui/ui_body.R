@@ -6,7 +6,8 @@ ui_body <- function(){
             bs4Box(
               height = "1200px",
               title = "Variables, number of unique values, missing",
-              variableInfoUI("varInfo")
+              fluidRow(
+              variableInfoUI("varInfo"))
             )
       ),
 

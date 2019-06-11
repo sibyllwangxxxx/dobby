@@ -21,15 +21,16 @@ variableInfo <- function(input, output, session, data_lst){
 
   output[["varsInfo"]] <- renderUI({
     nTabs <- length(data_lst())
-    # create tabPanel with datatable in it
+    # create tabPanel with table in it
     myTabs <- lapply(seq_len(nTabs), function(i) {
       id <- paste0("varsInfo", i)
-      tabPanel(paste0("Variables Info: ", names(data_lst())[i]),
-               dataTableOutput(ns(id))
+      tabPanel(paste0(" Dataset ", i, " "),
+               tableOutput(ns(id))
       )
     })
     #https://stackoverflow.com/questions/39276104/r-shiny-how-to-add-data-tables-to-dynamically-created-tabs
-    do.call(tabsetPanel, myTabs)
+    #do.call(tabsetPanel, myTabs)
+    do.call(shinydashboard::tabBox, myTabs)
   })
 
   observe({
@@ -38,7 +39,7 @@ variableInfo <- function(input, output, session, data_lst){
       local({
         j <- i
         id <- paste0("varsInfo", j)
-          output[[id]] <- renderDataTable({
+          output[[id]] <- renderTable({
             varInfo(data_lst()[[j]], lab = F, uniq = T, miss = T, misschar = c("", " "))
           })
       })
