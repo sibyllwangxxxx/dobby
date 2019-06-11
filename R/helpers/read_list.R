@@ -27,8 +27,8 @@ read_list <- function(list_of_datasets, read_func){
 }
 
 if(FALSE){
-files <- list.files("/camhpc/home/bwang4/dobby/data")
-data <- read_list(paste0("/camhpc/home/bwang4/dobby/data/", files), haven::read_sas) %>%
+files <- list.files("/camhpc/home/bwang4/dobby/data/sas")
+data <- read_list(paste0("/camhpc/home/bwang4/dobby/data/sas/", files), haven::read_sas) %>%
         setNames(., nm = str_remove(files, ".sas7bdat"))
 
 list2env(data, envir = .GlobalEnv)
