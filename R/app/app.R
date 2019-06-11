@@ -25,7 +25,12 @@ server <- function(input, output) {
 
   ## return row bound data
   data_bind <- callModule(stacker, "stack", data_lst = data_list())
-  output$data_bind <- renderDataTable(data_bind(), options = list(scrollX = TRUE))
+
+  ## filterCat
+  data_filterCat <- callModule(filterCat, "filterCat", dat = reactive(data_bind()))
+
+  ## dataTableOutput
+  output$data_prep <- renderDataTable(data_filterCat(), options = list(scrollX = TRUE))
 
 }
 
