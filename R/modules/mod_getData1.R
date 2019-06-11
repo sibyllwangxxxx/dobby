@@ -69,7 +69,7 @@ getData1<-function(input, output, session, URID = FALSE, tbl = TRUE){
       }else if(ext() == 1) { ## csv
 
         dataHere$uploadData <- suppressWarnings(read_csv(input$userFile$datapath, col_names = TRUE,
-                                                         trim_ws = FALSE, guess_max = 1000, na=c('', '-', 'NA', 'NULL'))) %>%
+                                                         guess_max = 1000, na=c('', '-', 'NA', 'NULL'))) %>%
           as.data.frame()
 
       }else if(ext() == 5) { ## sas
@@ -85,7 +85,7 @@ getData1<-function(input, output, session, URID = FALSE, tbl = TRUE){
       if (!is.na(ext()) & ext() %in% 2:3)
 
         dataHere$uploadData <- suppressWarnings(read_excel(input$userFile$datapath, col_names = TRUE, sheet = input$sheet,
-                                                           trim_ws = FALSE, guess_max = 1000, na=c('', '-', 'NA', 'NULL'))) %>%
+                                                           guess_max = 1000, na=c('', '-', 'NA', 'NULL'))) %>%
         as.data.frame()
 
     }
@@ -118,7 +118,6 @@ ui<-fluidPage(
   fluidRow(
     column(width=4, getData1UI("getData")),
     column(width=8,
-           textOutput("class"),
            tableOutput("data"))
   )
 )
@@ -127,8 +126,6 @@ server<-function(input, output, session){
   data<-callModule(getData1, "getData")
 
   output$data<-renderTable(data())
-
-  output$class <- renderText(class(data()))
 }
 
 shinyApp(ui, server)

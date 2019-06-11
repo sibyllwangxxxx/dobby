@@ -60,9 +60,9 @@ getData2<-function(input, output, session, URID = FALSE, tbl = TRUE){
       }else if(ext() == 1) { ## csv
 
         dataHere$uploadData <- lapply(input$userFile$datapath, function(path) {
-                                      suppressWarnings(read_csv(input$userFile$datapath, col_names = TRUE,
-                                                                trim_ws = FALSE, guess_max = 1000, na=c('', '-', 'NA', 'NULL')))
-                                      }) %>% as.data.frame()
+                                      suppressWarnings(read_csv(path, col_names = TRUE,
+                                                                guess_max = 1000, na=c('', '-', 'NA', 'NULL'))) %>% as.data.frame()
+                               })
 
       }else if(ext() == 5) { ## sas
         dataHere$uploadData <- lapply(input$userFile$datapath, function(path) haven::read_sas(path) %>% as.data.frame())
@@ -77,9 +77,9 @@ getData2<-function(input, output, session, URID = FALSE, tbl = TRUE){
       if (!is.na(ext()) & ext() %in% 2:3)
 
         dataHere$uploadData <- lapply(input$userFile$datapath, function(path) {
-                                      suppressWarnings(read_csv(input$userFile$datapath, col_names = TRUE,
-                                                                trim_ws = FALSE, guess_max = 1000, na=c('', '-', 'NA', 'NULL')))
-                                     }) %>% as.data.frame()
+                                      suppressWarnings(read_csv(path, col_names = TRUE,
+                                                       guess_max = 1000, na=c('', '-', 'NA', 'NULL'))) %>% as.data.frame()
+                               })
     }
 
   })
