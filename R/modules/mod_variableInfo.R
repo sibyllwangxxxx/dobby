@@ -38,7 +38,7 @@ variableInfo <- function(input, output, session, data_lst){
         j <- i
         id <- paste0("varsInfo", j)
           output[[id]] <- renderTable({
-            varInfo(data_lst()[[j]], lab = T, uniq = T, miss = T, misschar = c("", " "))
+            varInfo(data_lst()[[j]], lab = T, nrw = T, uniq = T, miss = T, misschar = c("", " "))
           })
       })
     }

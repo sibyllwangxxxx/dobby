@@ -6,6 +6,7 @@ library(stringr)
 library(tidyr)
 library(bs4Dash)
 library(shinydashboard)
+library(kableExtra)
 
 library(NCmisc) ## checkPackages.R
 library(Hmisc)

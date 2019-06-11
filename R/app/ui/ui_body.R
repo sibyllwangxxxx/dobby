@@ -11,7 +11,11 @@ ui_body <- function(){
       ),
 
     tabItem(
-      tabName = "item2"
+      tabName = "item2",
+      fluidRow(
+        box(title = "Select variables", width = 3, status = "success", stackerUI("stack")),
+        box(title = "Data bound by row", width = 9, status = "primary", tableOutput("data_bind"))
+      )
     )
 
     )
