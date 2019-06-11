@@ -5,6 +5,7 @@ library(rlang)
 library(stringr)
 library(tidyr)
 library(bs4Dash)
+library(shinydashboard)
 
 library(NCmisc) ## checkPackages.R
 

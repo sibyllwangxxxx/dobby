@@ -18,12 +18,11 @@ ui <- bs4DashPage(
 
 server <- function(input, output) {
 
-  data_list <- callModule(getData2, "getData")
+  ## returns a list of datasets
+  data_list <- reactive(callModule(getData2, "getData"))
 
-  output$data <- renderPrint({
-    data_list()
-  })
-
+  ## show tabs with tables of variable information
+  observe(callModule(variableInfo, "varInfo", data_lst = data_list()))
 
 }
 

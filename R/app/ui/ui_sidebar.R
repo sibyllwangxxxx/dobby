@@ -9,16 +9,21 @@ ui_sidebar <- function(){
   elevation = 3,
   opacity = 0.8,
   bs4SidebarMenu(
-    bs4SidebarHeader("Header 1"),
+    bs4SidebarHeader("Data preparation"),
     bs4SidebarMenuItem(
-      "Item 1",
+      "Variable information",
       tabName = "item1",
       icon = "sliders"
     ),
     bs4SidebarMenuItem(
-      "Item 2",
+      "Bind data by row",
       tabName = "item2",
       icon = "id-card"
+    ),
+    bs4SidebarMenuItem(
+      "Reshape data",
+      tabName = "item3",
+      icon = "arrows"
     )
   )
 )

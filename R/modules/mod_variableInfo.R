@@ -20,11 +20,11 @@ variableInfo <- function(input, output, session, data_lst){
   ns <- session$ns
 
   output[["varsInfo"]] <- renderUI({
-    nTabs <- length(data_lst)
+    nTabs <- length(data_lst())
     # create tabPanel with datatable in it
     myTabs <- lapply(seq_len(nTabs), function(i) {
       id <- paste0("varsInfo", i)
-      tabPanel(paste0("Variables Info: ", names(data_lst)[i]),
+      tabPanel(paste0("Variables Info: ", names(data_lst())[i]),
                dataTableOutput(ns(id))
       )
     })
@@ -34,12 +34,12 @@ variableInfo <- function(input, output, session, data_lst){
 
   observe({
 
-    for(i in seq_along(data_lst)) {
+    for(i in seq_along(data_lst())) {
       local({
         j <- i
         id <- paste0("varsInfo", j)
           output[[id]] <- renderDataTable({
-            varInfo(data_lst[[j]], lab = F, uniq = T, miss = T, misschar = c("", " "))
+            varInfo(data_lst()[[j]], lab = F, uniq = T, miss = T, misschar = c("", " "))
           })
       })
     }
@@ -51,11 +51,15 @@ variableInfo <- function(input, output, session, data_lst){
 
 if(FALSE){
 ui<-fluidPage(
+  tagList(
+  getData2UI("getData"),
   variableInfoUI("varInfo")
+  )
 )
 
 server<-function(input, output, session){
-  callModule(variableInfo, "varInfo", data_lst = list(mtcars = mtcars, iris = iris))
+  data_list <- reactive(callModule(getData2, "getData"))
+  callModule(variableInfo, "varInfo", data_lst = data_list())
 }
 
 shinyApp(ui, server)
