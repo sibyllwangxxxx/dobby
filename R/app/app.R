@@ -25,15 +25,7 @@ server <- function(input, output) {
 
   ## return row bound data
   data_bind <- callModule(stacker, "stack", data_lst = data_list())
-
-  output$data_bind <- function(){
-    data_bind() %>%
-      kable() %>%
-      kable_styling(bootstrap_options = c("striped", "hover"),
-                    position = 'float_left', full_width = F) %>%
-      scroll_box(height = "800px")
-  }
-
+  output$data_bind <- renderDataTable(data_bind(), options = list(scrollX = TRUE))
 
 }
 
