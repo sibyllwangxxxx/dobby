@@ -27,15 +27,10 @@ ui_body <- function(){
       tabName = "item3",
 
       box(title = "Control widgets", width = 4, status = "warning",
-          # column(width = 6, gglogUI("logy", lab = "Change y axis to log scale")),
-          # column(width = 6, gglogUI("logx", lab = "Change x axis to log scale")),
-          spaghettiUI("noodle")
-          ),
+          spaghettiUI("noodle")),
 
       box(title = "Spaghetti plot", width = 8, status = "info",
           plotOutput("p_noodle"))
-    )
-
-    )
+    ))
   )
 }
