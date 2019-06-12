@@ -29,7 +29,7 @@ server <- function(input, output) {
 # item 2 ------------------------------------------------------------------
 
   ## return row bound data
-  data_bind <- callModule(stacker, "stack", data_lst = data_list)
+  data_bind <- callModule(stacker, "stack", data_lst = DATA$data)
 
   ## filters
   data_filterDog <- callModule(filterDog, "filterDog", dat = data_bind)
