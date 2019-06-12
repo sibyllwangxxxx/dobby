@@ -1,0 +1,20 @@
+.section .reveal .state-background {
+  background: white;}
+.section .reveal h1,
+.section .reveal p {
+  color: black;
+  position: relative;
+  top: 25%;}
+
+.footer {
+    color: black; background: white;
+    position: fixed; top: 90%;
+    text-align: left; width:100%;
+}
+
+
+.page {
+    color: black; background: white;
+    position: fixed; top: 90%;
+    text-align: center; width:100%;
+}
