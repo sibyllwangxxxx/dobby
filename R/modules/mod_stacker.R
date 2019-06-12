@@ -12,7 +12,6 @@ stackerUI <- function(id){
   ns <- NS(id)
 
   tagList(
-    verbatimTextOutput(ns("tmp")),
     uiOutput(ns("intersectUI")),
     br(),
     uiOutput(ns("vars")),
