@@ -42,7 +42,10 @@ spaghetti <- function(input, output, session, dat = reactive(iris)){
           geom_point() +
           geom_line() +
           scale_x_continuous(breaks = x_ticks, labels = x_ticks) +
-          theme_light()
+          theme_light() +
+          theme(plot.title=element_text(hjust=0.5),
+                text=element_text(size=20),
+                legend.position="bottom")
   })
 
   return(reactive(list(yvar = input$yvar,

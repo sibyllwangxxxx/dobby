@@ -38,6 +38,10 @@ server <- function(input, output) {
   ## base spaghetti plot
   p_noodle <- callModule(spaghetti, "noodle", dat = data_filterCat)
 
+  # ## log scale
+  # p_noodle_p <- callModule(gglog, "logx", p = p_noodle$p, axis = "x")
+  # p_noodle_p <- callModule(gglog, "logy", p = p_noodle_p, axis = "y")
+
   output$p_noodle <- renderPlot(p_noodle()$p)
 
 }
