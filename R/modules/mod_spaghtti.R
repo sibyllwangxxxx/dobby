@@ -40,16 +40,31 @@ spaghetti <- function(input, output, session, dat = reactive(iris)){
 
         x_ticks <- unique(dat()[[input$xvar]])
 
-        ggplot(dat(), aes_string(x = input$xvar, y = input$yvar, group = input$idvar,
-                                 color = if(input$grpvar == "None") "NULL" else input$grpvar)) +
-          geom_point() +
-          geom_line() +
-          scale_x_continuous(breaks = x_ticks, labels = x_ticks) +
-          theme_light() +
-          theme(plot.title=element_text(hjust=0.5),
-                text=element_text(size=20),
-                legend.position="bottom") +
-          scale_colour_manual(values=palette())
+        datp <- dat() %>%
+                mutate(grpvar = if(input$grpvar == "None") "None" else as.character(.[[input$grpvar]]),
+                       xvar = .[[input$xvar]],
+                       yvar = .[[input$yvar]],
+                       idvar = .[[input$idvar]])
+
+        validate(
+          need(is.numeric(datp$xvar), "Choose numeric X variable.")
+        )
+
+        p <- ggplot(datp, aes(x = xvar, y = yvar, group = idvar)) +
+                scale_x_continuous(breaks = x_ticks, labels = x_ticks) +
+                theme_light() +
+                theme(plot.title=element_text(hjust=0.5),
+                      text=element_text(size=20),
+                      legend.position="bottom") +
+                scale_colour_manual(values=palette())
+
+        p <- if(input$grpvar == "None"){
+          p + geom_point() + geom_line()
+        }else{
+          p + geom_point(aes(color = grpvar)) + geom_line(aes(color = grpvar))
+        }
+
+        p
   })
 
   return(reactive(list(yvar = input$yvar,

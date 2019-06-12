@@ -3,9 +3,10 @@ lapply(paste0("C:/Users/bwang4/dobby/R/app/ui/", list.files("C:/Users/bwang4/dob
 lapply(paste0("C:/Users/bwang4/dobby/R/modules/", list.files("C:/Users/bwang4/dobby/R/modules/")), source)
 
 ui <- dashboardPage(
-  header = dashboardHeader(title = "Biomarker explorer"),
-  sidebar = ui_sidebar(),
-  body = ui_body()
+        error_style(),
+        header = dashboardHeader(title = "Biomarker explorer"),
+        sidebar = ui_sidebar(),
+        body = ui_body()
 )
 
 
