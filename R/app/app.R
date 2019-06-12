@@ -1,8 +1,8 @@
-appFun <- function(tool = TRUE, stack = TRUE){
-
 source("C:/Users/bwang4/dobby/R/global.R")
 lapply(paste0("C:/Users/bwang4/dobby/R/app/ui/", list.files("C:/Users/bwang4/dobby/R/app/ui/")), source)
 lapply(paste0("C:/Users/bwang4/dobby/R/modules/", list.files("C:/Users/bwang4/dobby/R/modules/")), source)
+
+appFun <- function(tool = TRUE, stack = TRUE){
 
 ui <- dashboardPage(
         error_style(),

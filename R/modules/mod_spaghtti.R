@@ -11,7 +11,7 @@
 spaghettiUI <- function(id){
   ns <- NS(id)
 
-  uiOutput(ns("varsUI"))
+      uiOutput(ns("varsUI"))
 
 }
 
