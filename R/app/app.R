@@ -12,13 +12,17 @@ ui <- dashboardPage(
 
 server <- function(input, output) {
 
+  DATA <- reactiveValues(data = NULL)
+
 
 # item 1 ------------------------------------------------------------------
 
   ## returns a list of datasets
   data_list <- callModule(getData2, "getData")
+  observe(DATA$data <- data_list)
+
   ## show tabs with tables of variable information
-  observe(callModule(variableInfo, "varInfo", data_lst = data_list))
+  observe(callModule(variableInfo, "varInfo", data_lst = DATA$data))
 
 
 
