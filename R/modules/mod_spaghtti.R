@@ -22,20 +22,23 @@ spaghetti <- function(input, output, session, dat = reactive(iris)){
   choices <- reactive(names(dat()))
 
   output$varsUI <- renderUI({
-    tagList(
-      selectInput(ns("yvar"), "Choose Y variable", choices = choices()),
-      selectInput(ns("xvar"), "Choose X variable", choices = choices()),
-      selectInput(ns("grpvar"), "Choose group variable", choices = choices())
+    fluidRow(
+      column(width = 6,
+             selectInput(ns("xvar"), "Choose X variable", choices = choices()),
+             selectInput(ns("yvar"), "Choose Y variable", choices = choices())),
+      column(width = 6,
+             selectInput(ns("idvar"), "Choose ID variable", choices = choices()),
+             selectInput(ns("grpvar"), "Choose group variable", choices = c("None", choices())))
+
     )
   })
 
   p <- reactive({
-        yvar <- sym(input$yvar)
-        xvar <- sym(input$xvar)
-        grpvar <- sym(input$grpvar)
+
         x_ticks <- unique(dat()[[input$xvar]])
 
-        ggplot(dat(), aes_string(x = input$xvar, y = input$yvar, group = input$grpvar)) +
+        ggplot(dat(), aes_string(x = input$xvar, y = input$yvar, group = input$idvar,
+                                 color = if(input$grpvar == "None") "NULL" else input$grpvar)) +
           geom_point() +
           geom_line() +
           scale_x_continuous(breaks = x_ticks, labels = x_ticks) +
@@ -44,6 +47,7 @@ spaghetti <- function(input, output, session, dat = reactive(iris)){
 
   return(reactive(list(yvar = input$yvar,
                         xvar = input$xvar,
+                        idvar = input$idvar,
                         grpvar = input$grpvar,
                         p = p())))
 

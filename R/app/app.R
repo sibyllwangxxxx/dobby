@@ -32,6 +32,14 @@ server <- function(input, output) {
 
   output$data_prep <- renderDataTable(data_filterCat(), options = list(scrollX = TRUE))
 
+
+# item 3 ------------------------------------------------------------------
+
+  ## base spaghetti plot
+  p_noodle <- callModule(spaghetti, "noodle", dat = data_filterCat)
+
+  output$p_noodle <- renderPlot(p_noodle()$p)
+
 }
 
 

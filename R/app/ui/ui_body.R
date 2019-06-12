@@ -5,8 +5,8 @@ ui_body <- function(){
       tabItem(
         tabName = "item1",
         fluidRow(
-          box(title = "Upload datasets", width = 3, status = "success", getData2UI("getData")),
-          box(title = "Variables in datasets", width = 9, status = "info", variableInfoUI("varInfo"))
+          box(title = "Upload datasets", width = 4, status = "success", getData2UI("getData")),
+          box(title = "Variables in datasets", width = 8, status = "info", variableInfoUI("varInfo"))
         )
       ),
 
@@ -15,13 +15,24 @@ ui_body <- function(){
       fluidRow(
         tabBox(title = "Prepare data", id = "prep",
                width = 4,
-               tabPanel("Bind by row", stackerUI("stack"), id = "byrow"),
-               tabPanel("Filter (continuous)", filterDogUI("filterDog"), id = "ollie"),
-               tabPanel("Filter (categorical)", filterCatUI("filterCat"), id = "denny")
-               ),
+               tabPanel("Bind by row", stackerUI("stack")),
+               tabPanel("Filter (continuous)", filterDogUI("filterDog")),
+               tabPanel("Filter (categorical)", filterCatUI("filterCat"))),
+
         box(title = "Data", width = 8, status = "primary", dataTableOutput("data_prep"))
         )
-      )
+      ),
+
+    tabItem(
+      tabName = "item3",
+
+      box(title = "Control widgets", width = 4, status = "warning",
+          spaghettiUI("noodle")),
+
+      box(title = "Spaghetti plot", width = 8, status = "info",
+          plotOutput("p_noodle"))
+    )
+
     )
   )
 }
