@@ -25,7 +25,8 @@ spaghetti <- function(input, output, session, dat = reactive(iris)){
     fluidRow(
       column(width = 6,
              selectInput(ns("xvar"), "Choose X variable", choices = choices()),
-             selectInput(ns("yvar"), "Choose Y variable", choices = choices())),
+             selectInput(ns("yvar"), "Choose Y variable", choices = choices()),
+             gglogUI(ns("ylog"), lab = "Change Y scale")),
       column(width = 6,
              selectInput(ns("idvar"), "Choose ID variable", choices = choices()),
              selectInput(ns("grpvar"), "Choose group variable", choices = c("None", choices())),
@@ -35,8 +36,11 @@ spaghetti <- function(input, output, session, dat = reactive(iris)){
   })
 
   palette<-callModule(colorPicker, "colors", ncolor=reactive(if(input$grpvar == "None") 1 else lenuniq(dat()[[input$grpvar]])))
+  ylog <- callModule(gglog, "ylog")
 
   p <- reactive({
+
+        req(input$xvar, input$yvar, input$idvar, input$grpvar)
 
         x_ticks <- unique(dat()[[input$xvar]])
 
@@ -47,7 +51,8 @@ spaghetti <- function(input, output, session, dat = reactive(iris)){
                        idvar = .[[input$idvar]])
 
         validate(
-          need(is.numeric(datp$xvar), "Choose numeric X variable.")
+          need(is.numeric(datp$xvar), "Choose numeric X variable."),
+          need(is.numeric(datp$yvar), "Choose numeric Y variable.")
         )
 
         p <- ggplot(datp, aes(x = xvar, y = yvar, group = idvar)) +
@@ -64,7 +69,7 @@ spaghetti <- function(input, output, session, dat = reactive(iris)){
           p + geom_point(aes(color = grpvar)) + geom_line(aes(color = grpvar))
         }
 
-        p
+        p + ylog()
   })
 
   return(reactive(list(yvar = input$yvar,

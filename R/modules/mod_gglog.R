@@ -18,19 +18,26 @@ gglogUI <- function(id, lab = "Change y axis to log scale"){
 
 }
 
-gglog <- function(input, output, session, p, axis = "y"){
+gglog <- function(input, output, session, axis = "y"){
 
   ns <- session$ns
 
   output$scaleUI <- renderUI({
-    selectInput(ns("scale"), "Choose scale", choices = c("log2", "log10", "natural log"))
+    if(input$check)
+      selectInput(ns("scale"),
+                  "Choose scale",
+                  choices = c("Natural log" = "log",
+                              "Log base 2" = "log2",
+                              "Log base 10" = "log10",
+                              "Sqaure root" = "sqrt"))
   })
 
-  return(eventReactive(input$check, {
+  return(reactive({
+    if(!is.null(input$check))
     if(input$check){
-      if(axis == "y") p() + scale_y_continuous(trans = input$scale) else p() + scale_x_continuous(trans = input$scale)
+      if(axis == "y") scale_y_continuous(trans = input$scale) else scale_x_continuous(trans = input$scale)
     }else{
-      p()
+      NULL
     }
   }))
 
