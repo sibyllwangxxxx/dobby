@@ -1,4 +1,4 @@
-appFun <- function(){
+appFun <- function(tool = TRUE, stack = TRUE){
 
 source("C:/Users/bwang4/dobby/R/global.R")
 lapply(paste0("C:/Users/bwang4/dobby/R/app/ui/", list.files("C:/Users/bwang4/dobby/R/app/ui/")), source)
@@ -8,7 +8,7 @@ ui <- dashboardPage(
         error_style(),
         header = dashboardHeader(title = "Biomarker explorer"),
         sidebar = ui_sidebar(),
-        body = ui_body()
+        body = ui_body(tool = tool, stack = stack)
 )
 
 
@@ -27,12 +27,13 @@ server <- function(input, output) {
 # item 2 ------------------------------------------------------------------
 
   ## return row bound data
-  data_bind <- callModule(stacker, "stack", data_lst = data_list)
-  #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
-  #                                                              #
-  #         data_bind <- reactive(bind_rows(data_list()))        #
-  #                                                              #
-  #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+  #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+  data_bind <- if(stack){
+                  callModule(stacker, "stack", data_lst = data_list)
+               }else{
+                  reactive(bind_rows(data_list()))
+               }
+  #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 
   ## filters
   data_filterDog <- callModule(filterDog, "filterDog", dat = data_bind)
@@ -47,12 +48,12 @@ server <- function(input, output) {
   p_noodle <- callModule(spaghetti, "noodle", dat = data_filterCat)
 
   #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
-  # output$p_noodle <- renderPlot(p_noodle()$p)                                   #
-   output$ggiraphplot <- renderggiraph(ggiraph(code = print(p_noodle()$gg)))     #
+  if(tool){
+    output$ggiraphplot <- renderggiraph(ggiraph(code = print(p_noodle()$gg)))
+  }else{
+    output$p_noodle <- renderPlot(p_noodle()$p)
+  }
   #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
-
-
-
 
 }
 
@@ -60,6 +61,6 @@ server <- function(input, output) {
 shinyApp(ui, server)
 }
 
-appFun()
+appFun(tool = FALSE, stack = FALSE)
 
 

@@ -33,7 +33,7 @@ gglog <- function(input, output, session, axis = "y"){
   })
 
   return(reactive({
-    if(!is.null(input$check))
+    if(!is.null(input$scale))
     if(input$check){
       if(axis == "y") scale_y_continuous(trans = input$scale) else scale_x_continuous(trans = input$scale)
     }else{

@@ -1,4 +1,4 @@
-ui_body <- function(){
+ui_body <- function(tool = TRUE, stack = TRUE){
   dashboardBody(
     tabItems(
 
@@ -15,7 +15,7 @@ ui_body <- function(){
       fluidRow(
         tabBox(title = "Prepare data", id = "prep",
                width = 4,
-               tabPanel("Bind by row", stackerUI("stack")),
+               tabPanel("Bind by row", if(stack) stackerUI("stack") else invisible()),
                tabPanel("Filter (continuous)", filterDogUI("filterDog")),
                tabPanel("Filter (categorical)", filterCatUI("filterCat"))),
 
@@ -30,10 +30,7 @@ ui_body <- function(){
           spaghettiUI("noodle")),
 
       box(title = "Spaghetti plot", width = 8, status = "info",
-          #+++++++++++++++++++++++++++++++++++#
-          # plotOutput("p_noodle")            #
-           ggiraphOutput("ggiraphplot")      #
-          #+++++++++++++++++++++++++++++++++++#
+          if(tool) ggiraphOutput("ggiraphplot") else plotOutput("p_noodle")
           )
     ))
   )
