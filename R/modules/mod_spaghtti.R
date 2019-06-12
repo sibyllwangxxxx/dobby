@@ -15,7 +15,7 @@ spaghettiUI <- function(id){
 
 }
 
-spaghetti <- function(input, output, session, dat = reactive(iris)){
+spaghetti <- function(input, output, session, dat = reactive(iris), legend_p = "bottom"){
 
   ns <- session$ns
 
@@ -82,9 +82,10 @@ spaghetti <- function(input, output, session, dat = reactive(iris)){
       theme_light() +
       theme(plot.title=element_text(hjust=0.5),
             text=element_text(size=20),
-            legend.position="bottom") +
+            legend.position=legend_p) +
       scale_colour_manual(values=palette()) +
-      ylog()
+      ylog() +
+      labs(color = input$grpvar)
   })
 
 
@@ -97,22 +98,12 @@ spaghetti <- function(input, output, session, dat = reactive(iris)){
           need(is.numeric(datp()$yvar), "Choose numeric Y variable.")
         )
 
-        # x_ticks <- unique(datp()$xvar)
-        # p <- ggplot(datp(), aes(x = xvar, y = yvar, group = idvar, tooltip = tooltip)) +
-        #         scale_x_continuous(breaks = x_ticks, labels = x_ticks) +
-        #         theme_light() +
-        #         theme(plot.title=element_text(hjust=0.5),
-        #               text=element_text(size=20),
-        #               legend.position="bottom") +
-        #         scale_colour_manual(values=palette()) +
-        #         ylog()
-
         p <- if(input$grpvar == "None"){
-          base_p() + geom_point(size=gears()$pointsize) + geom_line()
-        }else{
-          base_p + geom_point(aes(color = grpvar), size=gears()$pointsize) +
-                   geom_line(aes(color = grpvar))
-        }
+                base_p() + geom_point(size=gears()$pointsize) + geom_line()
+             }else{
+               base_p() + geom_point(aes(color = grpvar), size=gears()$pointsize) +
+                          geom_line(aes(color = grpvar))
+             }
 
         p + labs(title = ggTitle(), x=ggXlab(), y=ggYlab(), caption=ggFootnote())
   })
@@ -127,22 +118,12 @@ spaghetti <- function(input, output, session, dat = reactive(iris)){
       need(is.numeric(datp()$yvar), "Choose numeric Y variable.")
     )
 
-    x_ticks <- unique(datp()$xvar)
-    gg <- ggplot(datp(), aes(x = xvar, y = yvar, group = idvar, tooltip = tooltip)) +
-              scale_x_continuous(breaks = x_ticks, labels = x_ticks) +
-              theme_light() +
-              theme(plot.title=element_text(hjust=0.5),
-                    text=element_text(size=20),
-                    legend.position="bottom") +
-              scale_colour_manual(values=palette()) +
-              ylog()
-
     gg <- if(input$grpvar == "None"){
-      gg + geom_point_interactive(aes(tooltip = tooltip), size=gears()$pointsize) + geom_line()
-    }else{
-      gg + geom_point_interactive(aes(color = grpvar, tooltip = tooltip), size=gears()$pointsize) +
-           geom_line(aes(color = grpvar))
-    }
+             base_p() + geom_point_interactive(aes(tooltip = tooltip), size=gears()$pointsize) + geom_line()
+          }else{
+             base_p() + geom_point_interactive(aes(color = grpvar, tooltip = tooltip), size=gears()$pointsize) +
+                        geom_line(aes(color = grpvar))
+          }
 
     gg  + labs(title = ggTitle(), x=ggXlab(), y=ggYlab(), caption=ggFootnote())
 
@@ -174,7 +155,7 @@ ui <- fluidPage(
 
 server <- function(input, output, session){
 
-  res <- callModule(spaghetti, "spaghetti", dat = reactive(nars201_bm1))
+  res <- callModule(spaghetti, "spaghetti", dat = reactive(nars201_bm1), legend_p = "right")
 
   output$plotUI <- renderUI({
     plotOutput("plot",

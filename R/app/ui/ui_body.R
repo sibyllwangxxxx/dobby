@@ -30,7 +30,7 @@ ui_body <- function(tool = TRUE, stack = TRUE){
           spaghettiUI("noodle")),
 
       box(title = "Spaghetti plot", width = 8, status = "info",
-          if(tool) ggiraphOutput("ggiraphplot") else plotOutput("p_noodle")
+          if(tool) ggiraphOutput("ggiraphplot") else uiOutput("p_noodleUI")
           )
     ))
   )

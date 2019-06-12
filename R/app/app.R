@@ -47,9 +47,13 @@ server <- function(input, output) {
   ## base spaghetti plot
   p_noodle <- callModule(spaghetti, "noodle", dat = data_filterCat)
 
+  output$p_noodleUI <- renderUI(plotOutput("p_noodle", width = p_noodle()$w, height = p_noodle()$h))
+
   #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
   if(tool){
-    output$ggiraphplot <- renderggiraph(ggiraph(code = print(p_noodle()$gg)))
+    output$ggiraphplot <- renderggiraph(ggiraph(code = print(p_noodle()$gg),
+                                        width_svg =p_noodle()$w/100,
+                                        height_svg = p_noodle()$h/100))
   }else{
     output$p_noodle <- renderPlot(p_noodle()$p)
   }
@@ -61,6 +65,6 @@ server <- function(input, output) {
 shinyApp(ui, server)
 }
 
-appFun(tool = FALSE, stack = FALSE)
+appFun(tool = TRUE, stack = TRUE)
 
 
