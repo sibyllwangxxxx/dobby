@@ -28,10 +28,13 @@ spaghetti <- function(input, output, session, dat = reactive(iris)){
              selectInput(ns("yvar"), "Choose Y variable", choices = choices())),
       column(width = 6,
              selectInput(ns("idvar"), "Choose ID variable", choices = choices()),
-             selectInput(ns("grpvar"), "Choose group variable", choices = c("None", choices())))
+             selectInput(ns("grpvar"), "Choose group variable", choices = c("None", choices())),
+             colorPickerUI(ns("colors")))
 
     )
   })
+
+  palette<-callModule(colorPicker, "colors", ncolor=reactive(if(input$grpvar == "None") 1 else lenuniq(dat()[[input$grpvar]])))
 
   p <- reactive({
 
@@ -45,7 +48,8 @@ spaghetti <- function(input, output, session, dat = reactive(iris)){
           theme_light() +
           theme(plot.title=element_text(hjust=0.5),
                 text=element_text(size=20),
-                legend.position="bottom")
+                legend.position="bottom") +
+          scale_colour_manual(values=palette())
   })
 
   return(reactive(list(yvar = input$yvar,

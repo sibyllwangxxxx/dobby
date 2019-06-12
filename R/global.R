@@ -4,9 +4,12 @@ library(ggplot2)
 library(rlang)
 library(stringr)
 library(tidyr)
-library(bs4Dash)
+library(shinyWidgets)
+library(shinyBS)
 library(shinydashboard)
 library(kableExtra)
+library(scales)
+library(colourpicker)
 
 library(NCmisc) ## checkPackages.R
 library(Hmisc)
