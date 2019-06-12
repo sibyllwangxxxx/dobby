@@ -10,9 +10,7 @@
 
 spaghettiUI <- function(id){
   ns <- NS(id)
-
-      uiOutput(ns("varsUI"))
-
+  uiOutput(ns("varsUI"))
 }
 
 spaghetti <- function(input, output, session, dat = reactive(iris), legend_p = "bottom"){

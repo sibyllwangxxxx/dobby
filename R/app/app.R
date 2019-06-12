@@ -59,6 +59,14 @@ server <- function(input, output) {
   }
   #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 
+
+
+
+# save input --------------------------------------------------------------
+  observeEvent(input$save_inputs,{
+    saveRDS( reactiveValuesToList(input) , file = "inputs.RDS")
+  })
+
 }
 
 
