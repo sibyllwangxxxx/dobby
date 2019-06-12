@@ -38,24 +38,26 @@ spaghetti <- function(input, output, session, dat = reactive(iris)){
   palette<-callModule(colorPicker, "colors", ncolor=reactive(if(input$grpvar == "None") 1 else lenuniq(dat()[[input$grpvar]])))
   ylog <- callModule(gglog, "ylog")
 
+  datp <- reactive({
+            dat() %>%
+            mutate(grpvar = if(input$grpvar == "None") "None" else as.character(.[[input$grpvar]]),
+                   xvar = .[[input$xvar]],
+                   yvar = .[[input$yvar]],
+                   idvar = .[[input$idvar]],
+                   tooltip = paste0("X = ", xvar, "\n", "Y = ", yvar, "\n", "ID = ", idvar))
+          })
+
   p <- reactive({
 
         req(input$xvar, input$yvar, input$idvar, input$grpvar)
 
-        x_ticks <- unique(dat()[[input$xvar]])
-
-        datp <- dat() %>%
-                mutate(grpvar = if(input$grpvar == "None") "None" else as.character(.[[input$grpvar]]),
-                       xvar = .[[input$xvar]],
-                       yvar = .[[input$yvar]],
-                       idvar = .[[input$idvar]])
-
         validate(
-          need(is.numeric(datp$xvar), "Choose numeric X variable."),
-          need(is.numeric(datp$yvar), "Choose numeric Y variable.")
+          need(is.numeric(datp()$xvar), "Choose numeric X variable."),
+          need(is.numeric(datp()$yvar), "Choose numeric Y variable.")
         )
 
-        p <- ggplot(datp, aes(x = xvar, y = yvar, group = idvar)) +
+        x_ticks <- unique(datp()$xvar)
+        p <- ggplot(datp(), aes(x = xvar, y = yvar, group = idvar, tooltip = tooltip)) +
                 scale_x_continuous(breaks = x_ticks, labels = x_ticks) +
                 theme_light() +
                 theme(plot.title=element_text(hjust=0.5),
@@ -72,11 +74,43 @@ spaghetti <- function(input, output, session, dat = reactive(iris)){
         p + ylog()
   })
 
+
+  gg <- reactive({
+
+    req(input$xvar, input$yvar, input$idvar, input$grpvar)
+
+    validate(
+      need(is.numeric(datp()$xvar), "Choose numeric X variable."),
+      need(is.numeric(datp()$yvar), "Choose numeric Y variable.")
+    )
+
+    x_ticks <- unique(datp()$xvar)
+    gg <- ggplot(datp(), aes(x = xvar, y = yvar, group = idvar, tooltip = tooltip)) +
+              scale_x_continuous(breaks = x_ticks, labels = x_ticks) +
+              theme_light() +
+              theme(plot.title=element_text(hjust=0.5),
+                    text=element_text(size=20),
+                    legend.position="bottom") +
+              scale_colour_manual(values=palette()) +
+              ylog()
+
+    gg <- if(input$grpvar == "None"){
+      gg + geom_point_interactive(aes(tooltip = tooltip)) + geom_line()
+    }else{
+      gg + geom_point_interactive(aes(color = grpvar, tooltip = tooltip)) + geom_line(aes(color = grpvar))
+    }
+
+    gg
+
+  })
+
+
   return(reactive(list(yvar = input$yvar,
                         xvar = input$xvar,
                         idvar = input$idvar,
                         grpvar = input$grpvar,
-                        p = p())))
+                        p = p(),
+                        gg = gg())))
 
 }
 
@@ -85,13 +119,19 @@ if(FALSE){
 
 ui <- fluidPage(
   spaghettiUI("spaghetti"),
-  plotOutput("plot")
+  plotOutput("plot"),
+  ggiraphOutput("ggiraphplot")
 )
 
 
 server <- function(input, output, session){
   res <- callModule(spaghetti, "spaghetti", dat = reactive(nars201_bm1))
+
   output$plot <- renderPlot(res()$p)
+
+  output$ggiraphplot <- renderggiraph({
+    ggiraph(code = print(res()$gg))
+  })
 }
 
 shinyApp(ui, server)

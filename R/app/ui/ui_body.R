@@ -30,7 +30,11 @@ ui_body <- function(){
           spaghettiUI("noodle")),
 
       box(title = "Spaghetti plot", width = 8, status = "info",
-          plotOutput("p_noodle"))
+          #+++++++++++++++++++++++++++++++++++#
+          # plotOutput("p_noodle")            #
+           ggiraphOutput("ggiraphplot")      #
+          #+++++++++++++++++++++++++++++++++++#
+          )
     ))
   )
 }

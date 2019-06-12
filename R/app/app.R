@@ -1,3 +1,5 @@
+appFun <- function(){
+
 source("C:/Users/bwang4/dobby/R/global.R")
 lapply(paste0("C:/Users/bwang4/dobby/R/app/ui/", list.files("C:/Users/bwang4/dobby/R/app/ui/")), source)
 lapply(paste0("C:/Users/bwang4/dobby/R/modules/", list.files("C:/Users/bwang4/dobby/R/modules/")), source)
@@ -12,24 +14,25 @@ ui <- dashboardPage(
 
 server <- function(input, output) {
 
-  DATA <- reactiveValues(data = NULL)
-
-
 # item 1 ------------------------------------------------------------------
 
   ## returns a list of datasets
   data_list <- callModule(getData2, "getData")
-  observe(DATA$data <- data_list)
 
   ## show tabs with tables of variable information
-  observe(callModule(variableInfo, "varInfo", data_lst = DATA$data))
+  observe(callModule(variableInfo, "varInfo", data_lst = data_list))
 
 
 
 # item 2 ------------------------------------------------------------------
 
   ## return row bound data
-  data_bind <- callModule(stacker, "stack", data_lst = DATA$data)
+  data_bind <- callModule(stacker, "stack", data_lst = data_list)
+  #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+  #                                                              #
+  #         data_bind <- reactive(bind_rows(data_list()))        #
+  #                                                              #
+  #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 
   ## filters
   data_filterDog <- callModule(filterDog, "filterDog", dat = data_bind)
@@ -43,12 +46,20 @@ server <- function(input, output) {
   ## base spaghetti plot
   p_noodle <- callModule(spaghetti, "noodle", dat = data_filterCat)
 
-  output$p_noodle <- renderPlot(p_noodle()$p)
+  #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+  # output$p_noodle <- renderPlot(p_noodle()$p)                                   #
+   output$ggiraphplot <- renderggiraph(ggiraph(code = print(p_noodle()$gg)))     #
+  #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+
+
+
 
 }
 
 
 shinyApp(ui, server)
+}
 
+appFun()
 
 
