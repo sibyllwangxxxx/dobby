@@ -16,5 +16,5 @@
 .page {
     color: black; background: white;
     position: fixed; top: 90%;
-    text-align: center; width:100%;
+    text-align: left; width:100%;
 }
