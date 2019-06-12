@@ -15,21 +15,21 @@ server <- function(input, output) {
 # item 1 ------------------------------------------------------------------
 
   ## returns a list of datasets
-  data_list <- reactive(callModule(getData2, "getData"))
+  data_list <- callModule(getData2, "getData")
   ## show tabs with tables of variable information
-  observe(callModule(variableInfo, "varInfo", data_lst = data_list()))
+  observe(callModule(variableInfo, "varInfo", data_lst = data_list))
 
 
 
 # item 2 ------------------------------------------------------------------
 
   ## return row bound data
-  data_bind <- callModule(stacker, "stack", data_lst = data_list())
+  data_bind <- callModule(stacker, "stack", data_lst = data_list)
 
-  ## filterCat
-  data_filterCat <- callModule(filterCat, "filterCat", dat = reactive(data_bind()))
+  ## filters
+  data_filterDog <- callModule(filterDog, "filterDog", dat = data_bind)
+  data_filterCat <- callModule(filterCat, "filterCat", dat = data_filterDog)
 
-  ## dataTableOutput
   output$data_prep <- renderDataTable(data_filterCat(), options = list(scrollX = TRUE))
 
 }

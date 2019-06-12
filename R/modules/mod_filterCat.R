@@ -1,13 +1,3 @@
-## --------------------------------------------------------------------
-## Program: mod_filterCat.R
-## Date: 06/11/2019
-## Author: bwang4
-## Project: DQM
-## Purpose: Shiny module for categorical filter
-## Input: data
-## Output: filtered data
-## --------------------------------------------------------------------
-
 filterCatUI<-function(id){
   ns<-NS(id)
 
@@ -23,6 +13,7 @@ filterCatUI<-function(id){
 filterCat<-function(input, output, session, dat=reactive(iris)){
 
   ns<-session$ns
+
   ind<-reactive(input$add-input$rmv)
 
   observeEvent(input$add, {
@@ -45,18 +36,27 @@ filterCat<-function(input, output, session, dat=reactive(iris)){
   observeEvent(input[[paste0("var", ind())]], {
 
     var<-input[[paste0("var", ind())]]
+
+
     levels<-as.character(unique(dat()[[var]]))
     updateSelectInput(session, paste0("val", ind()), choices=c("", levels), selected = "")
+
+
 
   })
 
 
 
+
   observeEvent(input$rmv, {
 
-    removeUI(selector = paste0("div:has(>> #", ns(""), "var", ind()+1, ")"))
+    removeUI(
+      selector = paste0("div:has(>> #", ns(""), "var", ind()+1, ")")
+    )
 
-    removeUI(selector = paste0("div:has(>> #", ns(""), "val", ind()+1, ")"))
+    removeUI(
+      selector = paste0("div:has(>> #", ns(""), "val", ind()+1, ")")
+    )
   })
 
 
@@ -83,7 +83,10 @@ filterCat<-function(input, output, session, dat=reactive(iris)){
 
   })
 
+
   return(reactive(data_out()))
+
+
 
 }
 

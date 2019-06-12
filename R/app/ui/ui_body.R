@@ -13,10 +13,11 @@ ui_body <- function(){
     tabItem(
       tabName = "item2",
       fluidRow(
-        tabBox(title = "Prepare data",
+        tabBox(title = "Prepare data", id = "prep",
                width = 4,
-               tabPanel("Bind by row", stackerUI("stack")),
-               tabPanel("Filter (categorical)", filterCatUI("filterCat"))
+               tabPanel("Bind by row", stackerUI("stack"), id = "byrow"),
+               tabPanel("Filter (continuous)", filterDogUI("filterDog"), id = "ollie"),
+               tabPanel("Filter (categorical)", filterCatUI("filterCat"), id = "denny")
                ),
         box(title = "Data", width = 8, status = "primary", dataTableOutput("data_prep"))
         )
