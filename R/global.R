@@ -10,6 +10,7 @@ library(shinydashboard)
 library(kableExtra)
 library(scales)
 library(colourpicker)
+library(ggiraph)
 
 library(NCmisc) ## checkPackages.R
 library(Hmisc)
