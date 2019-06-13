@@ -31,6 +31,9 @@ scatter <- function(input, output, session, dat = reactive(iris), legend_p = "bo
                selectInput(ns("grpvar"), "Choose group variable", choices = c("None", choices())),
                colorPickerUI(ns("colors")))),
       fluidRow(
+        column(width = 6, checkboxInput(ns("subgrp"), "Add subgroup linear model")),
+        column(width = 6, checkboxInput(ns("overall"), "Add overall linear model"))),
+      fluidRow(
         dropdownButton(
           tags$h3("Edit appearance"),
           circle = TRUE, status = "danger", icon = icon("gear"), width = "300px",
@@ -74,7 +77,8 @@ scatter <- function(input, output, session, dat = reactive(iris), legend_p = "bo
 
 
   base_p <- reactive({
-    ggplot(datp(), aes(x = xvar, y = yvar, group = idvar, tooltip = tooltip)) +
+    base_p <- ggplot(datp(), aes(x = xvar, y = yvar, group = idvar, tooltip = tooltip)) +
+      geom_smooth() +
       theme_light() +
       theme(plot.title=element_text(hjust=0.5),
             text=element_text(size=20),
@@ -82,6 +86,8 @@ scatter <- function(input, output, session, dat = reactive(iris), legend_p = "bo
       scale_colour_manual(values=palette()) +
       ylog() +
       labs(color = input$grpvar)
+
+    base_p
   })
 
 

@@ -43,6 +43,17 @@ ui_body <- function(tool = TRUE, stack = TRUE){
       box(title = "Wide data", width = 8, status = "info",
           dataTableOutput("widetb")
       )
+    ),
+
+    tabItem(
+      tabName = "item5",
+
+      box(title = "Control widgets", width = 4, status = "warning",
+          scatterUI("scatter")),
+
+      box(title = "Scatter plot", width = 8, status = "info",
+          if(tool) ggiraphOutput("scatterggiraphplot") else uiOutput("p_scatterUI")
+      )
     ))
   )
 }

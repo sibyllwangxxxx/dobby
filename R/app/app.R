@@ -72,6 +72,25 @@ server <- function(input, output) {
 
 
 
+# item 5 ------------------------------------------------------------------
+
+  ## base spaghetti plot
+  p_scatter <- callModule(scatter, "scatter", dat = data_wide)
+
+  output$p_scatterUI <- renderUI(plotOutput("p_scatter", width = p_scatter()$w, height = p_scatter()$h))
+
+  #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+  if(tool){
+    output$scatterggiraphplot <- renderggiraph(ggiraph(code = print(p_scatter()$gg),
+                                                width_svg =p_scatter()$w/100,
+                                                height_svg = p_scatter()$h/100))
+  }else{
+    output$p_scatter <- renderPlot(p_scatter()$p)
+  }
+  #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+
+
+
 # save input --------------------------------------------------------------
   observeEvent(input$save_inputs,{
     saveRDS( reactiveValuesToList(input) , file = "inputs.RDS")

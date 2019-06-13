@@ -5,6 +5,7 @@ ui_sidebar <- function(){
     menuItem("Prepare data", tabName = "item2", icon = icon("arrows")),
     menuItem("Spaghetti plot", tabName = "item3", icon = icon("arrows")),
     menuItem("Reshape data", tabName = "item4", icon = icon("arrows")),
+    menuItem("Scatter plot", tabName = "item5", icon = icon("arrows")),
     actionButton("save_inputs", "Save inputs")
   )
 )
