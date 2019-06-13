@@ -102,6 +102,14 @@ server <- function(input, output) {
 shinyApp(ui, server)
 }
 
-appFun(tool = TRUE, stack = TRUE)
+if(FALSE){
+
+  lapply(paste0("data/rds/", list.files("data/rds")), readRDS) %>%
+    setNames(., nm = str_remove(list.files("data/rds"), ".RDS")) %>%
+    list2env(envir = .GlobalEnv)
+
+  appFun(tool = TRUE, stack = TRUE)
+}
+
 
 
