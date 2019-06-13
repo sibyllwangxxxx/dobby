@@ -8,34 +8,83 @@
 ## Output:
 ## --------------------------------------------------------------------
 
-tfs <- bind_rows(tfs3b_bm2, tfs3b_bm1, nars201_bm1)
-tfs_wide <- tfs %>% dplyr::select(VISIT, USUBJID, PARAM, AVAL)
-tfs_wide <- tfs_wide %>% spread(key = PARAM, value = AVAL)
-tfs_wide <- tfs_wide %>% left_join(tfs %>% select(AGE, SEX, TYPE, USUBJID) %>% distinct(.keep_all = T))
 
 
 long2WideUI <- function(id){
   ns <- NS(id)
 
   tagList(
-
+    uiOutput(ns("l2wUI")),
+    actionButton(ns("magic"), "Reshape data")
   )
 }
 
-long2Wide <- function(input, output, session, dat = reactive()){
-  ns <- session
+long2Wide <- function(input, output, session, dat = reactive(iris)){
+  ns <- session$ns
+
+  choices <- reactive(names(dat()))
+  # dmchoices <- reactive({
+  #   req(input$idvar)
+  #   choices()[sapply(dat(), lenuniq)==3]
+  # })
+
+  output$l2wUI <- renderUI({
+      tagList(
+          fluidRow(
+            column(width = 6,
+                   selectizeInput(ns("timevar"),
+                                  "Select time point variable",
+                                  choices = c(NULL, choices())),
+                   selectizeInput(ns("keyvar"),
+                                  "Select key variable",
+                                  choices = choices(),
+                                  multiple = TRUE)),
+            column(width = 6,
+                   selectizeInput(ns("idvar"),
+                                  "Select ID variable",
+                                  choices = choices()),
+                   selectizeInput(ns("valvar"),
+                                  "Select value variable",
+                                  choices = choices()))),
+          fluidRow(column(width = 12,
+                          selectizeInput(ns("dmvar"),
+                                         "Select variables to join with wide data",
+                                         choices = choices(), multiple = TRUE)))
+      )
+
+  })
+
+  ## unite() https://community.rstudio.com/t/spread-with-multiple-value-columns/5378/2
+  datw <- eventReactive(input$magic, {
+    datw <- dat() %>%
+            dplyr::select(!!sym(input$timevar), !!!syms(input$keyvar), !!sym(input$valvar), !!sym(input$idvar)) %>%
+            unite(key, !!!syms(input$keyvar)) %>%
+            spread(key = key, value = !!sym(input$valvar))  %>%
+            left_join(dat() %>% dplyr::select(!!!syms(input$dmvar), !!sym(input$idvar)) %>% distinct(.keep_all = T))
+    datw
+  })
+
+
+  return(reactive(datw()))
+
 }
 
 
 
 
 if(FALSE){
+
+  tfs <- bind_rows(tfs3b_bm2, tfs3b_bm1, nars201_bm1)
+
   ui<-fluidPage(
-    long2WideUI("long2Wide")
+    long2WideUI("long2Wide"),
+    dataTableOutput("data")
   )
 
   server<-function(input, output, session){
-    callModule(long2Wide, "long2Wide")
+    data_wide <- callModule(long2Wide, "long2Wide", dat = reactive(tfs))
+
+    output$data <- renderDataTable(data_wide())
   }
 
   shinyApp(ui, server)
