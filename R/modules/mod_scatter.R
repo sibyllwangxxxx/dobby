@@ -77,8 +77,7 @@ scatter <- function(input, output, session, dat = reactive(iris), legend_p = "bo
 
 
   base_p <- reactive({
-    base_p <- ggplot(datp(), aes(x = xvar, y = yvar, group = idvar, tooltip = tooltip)) +
-      geom_smooth() +
+    base_p <- ggplot(datp(), aes(x = xvar, y = yvar, group = grpvar, tooltip = tooltip)) +
       theme_light() +
       theme(plot.title=element_text(hjust=0.5),
             text=element_text(size=20),
@@ -86,6 +85,14 @@ scatter <- function(input, output, session, dat = reactive(iris), legend_p = "bo
       scale_colour_manual(values=palette()) +
       ylog() +
       labs(color = input$grpvar)
+
+    base_p <- if(input$subgrp & (input$grpvar != "None")){
+                 base_p + geom_smooth(method = "lm", se = FALSE, aes(color = !!sym(input$grpvar)))
+              }else{
+                 base_p
+              }
+
+    base_p <- if(input$overall) base_p + geom_smooth(method = "lm", se = FALSE, color="black", linetype=2) else base_p
 
     base_p
   })
