@@ -42,6 +42,8 @@ server <- function(input, output) {
   output$data_prep <- renderDataTable(data_filterCat(), options = list(scrollX = TRUE))
 
 
+
+
 # item 3 ------------------------------------------------------------------
 
   ## base spaghetti plot
@@ -59,6 +61,14 @@ server <- function(input, output) {
   }
   #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 
+
+
+
+# item 4 ------------------------------------------------------------------
+
+  data_wide <- callModule(long2Wide, "l2w", dat = data_filterCat)
+
+  output$widetb <- renderDataTable(data_wide())
 
 
 

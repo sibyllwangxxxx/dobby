@@ -32,6 +32,17 @@ ui_body <- function(tool = TRUE, stack = TRUE){
       box(title = "Spaghetti plot", width = 8, status = "info",
           if(tool) ggiraphOutput("ggiraphplot") else uiOutput("p_noodleUI")
           )
+    ),
+
+    tabItem(
+      tabName = "item4",
+
+      box(title = "Control widgets", width = 4, status = "warning",
+          long2WideUI("l2w")),
+
+      box(title = "Wide data", width = 8, status = "info",
+          dataTableOutput("widetb")
+      )
     ))
   )
 }

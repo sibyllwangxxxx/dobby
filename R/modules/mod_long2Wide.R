@@ -59,8 +59,18 @@ long2Wide <- function(input, output, session, dat = reactive(iris)){
     datw <- dat() %>%
             dplyr::select(!!sym(input$timevar), !!!syms(input$keyvar), !!sym(input$valvar), !!sym(input$idvar)) %>%
             unite(key, !!!syms(input$keyvar)) %>%
-            spread(key = key, value = !!sym(input$valvar))  %>%
+            spread(key = key, value = !!sym(input$valvar))
+    nrow1 <- nrow(datw)
+    datw <- datw %>%
             left_join(dat() %>% dplyr::select(!!!syms(input$dmvar), !!sym(input$idvar)) %>% distinct(.keep_all = T))
+    nrow2 <- nrow(datw)
+
+  validate(
+    need(nrow1 == nrow2, "Variables selected to join wide table are not unique to each subject.")
+  )
+
+  #if(nrow1!=nrow2) warning("Variables selected to join wide table are not unique to each subject.")
+
     datw
   })
 
