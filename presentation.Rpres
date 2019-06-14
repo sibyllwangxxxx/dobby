@@ -36,7 +36,7 @@ Still me
 
 
 <center>
-![](presentation-figure/swim.jpg)
+![](./presentation-figure/swim.jpg)
 </center>
 
 
@@ -97,7 +97,7 @@ Obvious solution
 - R packages, statistical methods, open data science community
 
 <center>
-![](presentation-figure/source.gif)
+![](./presentation-figure/source.gif)
 </center>
 
 
@@ -159,7 +159,7 @@ What about packages/extentions from the community?
 ========================================================
 
 <center>
-![](presentation-figure/shinyextensions.PNG)
+![](./presentation-figure/shinyextensions.PNG)
 </center>
 
 
@@ -186,7 +186,7 @@ p(erfect) <-
 ***
 
 <center>
-![](presentation-figure/lego.jpg)
+![](./presentation-figure/lego.jpg)
 </center>
 
 
@@ -196,7 +196,7 @@ Module: mod_getData1.R
 ========================================================
 
 <center>
-![](presentation-figure/getData1.gif)
+![](./presentation-figure/getData1.gif)
 </center>
 
 
@@ -207,7 +207,7 @@ Module: mod_getData2.R
 ========================================================
 
 <center>
-![](presentation-figure/getData2.gif)
+![](./presentation-figure/getData2.gif)
 </center>
 
 
@@ -217,7 +217,7 @@ Module: mod_varInfo.R
 ========================================================
 
 <center>
-![](presentation-figure/varInfo.gif)
+![](./presentation-figure/varInfo.gif)
 </center>
 
 
@@ -226,7 +226,7 @@ Code snippet: dynamicUIelements
 ========================================================
 
 <center>
-![](presentation-figure/snippet1.gif)
+![](./presentation-figure/snippet1.gif)
 </center>
 
 
@@ -235,7 +235,7 @@ Module: mod_filterCat.R
 ========================================================
 
 <center>
-![](presentation-figure/filterCat.gif)
+![](./presentation-figure/filterCat.gif)
 </center>
 
 
@@ -244,7 +244,7 @@ Module: mod_filterDog.R
 ========================================================
 
 <center>
-![](presentation-figure/filterDog.gif)
+![](./presentation-figure/filterDog.gif)
 </center>
 
 
@@ -252,7 +252,7 @@ Module: Dog.R
 ========================================================
 
 <center>
-![](presentation-figure/IMG-0408.JPG)
+![](./presentation-figure/IMG-0408.JPG)
 </center>
 
 
@@ -263,7 +263,7 @@ Module: mod_colorPicker.R
 ========================================================
 
 <center>
-![](presentation-figure/colorPicker.gif)
+![](./presentation-figure/colorPicker.gif)
 </center>
 
 
@@ -275,7 +275,7 @@ Module: mod_gear.R
 ========================================================
 
 <center>
-![](presentation-figure/gear.gif)
+![](./presentation-figure/gear.gif)
 </center>
 
 
@@ -308,7 +308,7 @@ Module: mod_spaghetti.R
 ========================================================
 
 <center>
-![](presentation-figure/spaghetti.gif)
+![](./presentation-figure/spaghetti.gif)
 </center>
 
 
@@ -318,7 +318,7 @@ Module: mod_long2Wide.R
 ========================================================
 
 <center>
-![](presentation-figure/long2Wide.gif)
+![](./presentation-figure/long2Wide.gif)
 </center>
 
 
@@ -328,7 +328,7 @@ Module: mod_scatter.R
 ========================================================
 
 <center>
-![](presentation-figure/scatter.gif)
+![](./presentation-figure/scatter.gif)
 </center>
 
 
