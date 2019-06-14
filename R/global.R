@@ -11,6 +11,7 @@ library(kableExtra)
 library(scales)
 library(colourpicker)
 library(ggiraph)
+library(knitr)
 
 library(NCmisc) ## checkPackages.R
 library(Hmisc)
