@@ -100,6 +100,7 @@ Obvious solution
 ![](./presentation-figure/source.gif)
 </center>
 
+<img src="presentation-figure/source.gif" width="70%" style="display: block; margin: auto;" />
 
 
 
