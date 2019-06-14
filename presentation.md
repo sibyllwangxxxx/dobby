@@ -35,9 +35,9 @@ Still me
 
 
 
-<center>
-<img src="presentation-figure/swim.jpg"/>
-</center>
+
+<img src="presentation-figure/swim.jpg" class="center"/>
+
 
 
 Things I will talk about
@@ -97,7 +97,7 @@ Obvious solution
 - R packages, statistical methods, open data science community
 
 
-<img src="presentation-figure/source.gif" width="70%" style="display: block; margin: auto;" />
+<img src="presentation-figure/source.gif" width="70%" style="display: block; margin: auto;" class="center"/>
 
 
 
