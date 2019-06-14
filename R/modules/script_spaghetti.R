@@ -43,13 +43,8 @@ scr_spaghetti <- function(id, dat = iris, legend_p = "bottom"){
 
 if(FALSE){
 
-lapply(paste0("data/rds/", list.files("data/rds")), readRDS) %>%
-    setNames(., nm = str_remove(list.files("data/rds"), ".RDS")) %>%
-    list2env(envir = .GlobalEnv)
+  ## demo
 noodle_data <- bind_rows(list(nars201_bm1, nars201_bm2_csf))
-
-
-## demo
 (p <- scr_spaghetti(id = "noodle", dat = noodle_data))
 p + scale_color_manual(values = c("green", "red")) +
     facet_grid(facets = "SEX~.")

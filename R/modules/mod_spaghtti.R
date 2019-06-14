@@ -146,8 +146,12 @@ if(FALSE){
 
 ui <- fluidPage(
   spaghettiUI("spaghetti"),
-  uiOutput("plotUI"),
-  ggiraphOutput("ggiraphplot")
+  fluidRow(
+    column(width = 6, uiOutput("plotUI")),
+    column(width = 6, ggiraphOutput("ggiraphplot"))
+  )
+
+
 )
 
 
