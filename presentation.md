@@ -5,9 +5,9 @@ date: Sr. Analyst, Stats Programming, Biogen
 autosize: true
 css: style.css
 
-<div class="footer"> June 13, 2019 </div>
 
-
+<br>
+<br>
 
 
 Me %>%
@@ -25,6 +25,11 @@ Boston (since June 2019)
 
 
 
+<br>
+<br>
+
+
+
 Still me
 ========================================================
 
@@ -34,10 +39,12 @@ Still me
 - <sup>data scientists in R community</sup>&frasl;<sub>following on Twitter</sub> ≈ 95%
 
 
+<img src="presentation-figure/swim.jpg" alt="centered image" width="80%" style="display: block; margin: auto;" alt="centered image"/>
 
 
-<img src="presentation-figure/swim.jpg" class="center"/>
 
+<br>
+<br>
 
 
 Things I will talk about
@@ -58,6 +65,11 @@ Things I will talk about
 - Lessons learned
 
 
+
+<br>
+<br>
+
+
 Story time
 ========================================================
 
@@ -65,6 +77,9 @@ Story time
 
 **GZ** is a **biostatistician**. At any given time, they work on at least 10 projects from 5 studies on 3 different compounds. They received the **ad hoc** table and figure requests, and did some (hopefully) **reproducible** exploratory analyses. Then they spent multiple hours on the phone/exchanged **50+ emails** with **SC**, trying to come up with clear, succint, non-ambiguous table/figure specifications.
 
+
+<br>
+<br>
 
 
 Story time
@@ -77,6 +92,10 @@ Story time
 **EM** finished the requests on Friday and was ready for the weekend. Suddenly they got a ping from **GZ**, the biostatistician: "Can you make a small change to the scatter plot? Can you create plots for patients in group A who have type X and are at least 1 year, 6 month, and 3 months old when they started the trial?"
 
 
+<br>
+<br>
+
+
 Story time
 ========================================================
 
@@ -86,6 +105,9 @@ Repeat the above process for 2-5 times.
 
 **Problem**: Functions with no programming background and/or other priorities need an easy way to explore data and reach a consensus of what table/figures should be produced and reduce back-and-forth communication.
 
+
+<br>
+<br>
 
 
 Obvious solution
@@ -97,9 +119,12 @@ Obvious solution
 - R packages, statistical methods, open data science community
 
 
-<img src="presentation-figure/source.gif" width="70%" style="display: block; margin: auto;" class="center"/>
+<img src="presentation-figure/source.gif" width="80%" style="display: block; margin: auto;" alt="centered image"/>
 
 
+
+<br>
+<br>
 
 
 Not always easy...
@@ -118,8 +143,8 @@ Not always easy...
 
 
 
-
-
+<br>
+<br>
 
 
 
@@ -133,7 +158,8 @@ Once created, a Shiny module can be easily **reused** – whether across differe
 -- Joe Cheng, author of Shiny package
 
 
-
+<br>
+<br>
 
 
 
@@ -152,17 +178,21 @@ Not necessarilty. Suitable Shiny module features:
 
 
 
+<br>
+<br>
+
 
 What about packages/extentions from the community?
 ========================================================
 
-<center>
-<img src="presentation-figure/shinyextensions.PNG"/>
-</center>
+
+<img src="presentation-figure/shinyextensions.PNG" width="80%" style="display: block; margin: auto;" alt="centered image"/>
 
 
 
 
+<br>
+<br>
 
 
 
@@ -171,88 +201,90 @@ My solution: Shiny LEGO
 <br>
 p(erfect) <-
 
-**<font size="20">Shiny Modules</font>** +
+**<font size="8">Shiny Modules</font>** +
 
-**<font size="7">code snippet</font>** +
+**<font size="6">code snippet</font>** +
 
-**<font size="7">R functions</font>** +
+**<font size="6">R functions</font>** +
 
-**<font size="7">.rds</font>** +
+**<font size="6">.rds</font>** +
 
-**<font size="6">package/extensions</font>**
+**<font size="4">package/extensions</font>**
 
 ***
 
-<center>
-<img src="presentation-figure/lego.jpg"/>
-</center>
+
+<img src="presentation-figure/lego.jpg" width="80%" style="display: block; margin: auto;" alt="centered image"/>
 
 
+<br>
+<br>
 
 
 Module: mod_getData1.R
 ========================================================
 
-<center>
-<img src="presentation-figure/getData1.gif"/>
-</center>
+
+<img src="presentation-figure/getData1.gif" width="80%" style="display: block; margin: auto;" alt="centered image"/>
 
 
 
+<br>
+<br>
 
 
 Module: mod_getData2.R
 ========================================================
 
-<center>
-<img src="presentation-figure/getData2.gif"/>
-</center>
+
+<img src="presentation-figure/getData2.gif" width="80%" style="display: block; margin: auto;" alt="centered image"/>
 
 
+<br>
+<br>
 
 
 Module: mod_varInfo.R
 ========================================================
 
-<center>
-<img src="presentation-figure/varInfo.gif"/>
-</center>
 
+<img src="presentation-figure/varInfo.gif" width="80%" style="display: block; margin: auto;" alt="centered image"/>
+
+
+
+<br>
+<br>
 
 
 Code snippet: dynamicUIelements
 ========================================================
 
-<center>
-<img src="presentation-figure/snippet1.gif"/>
-</center>
 
+<img src="presentation-figure/snippet1.gif" width="80%" style="display: block; margin: auto;" alt="centered image"/>
+
+
+<br>
+<br>
 
 
 Module: mod_filterCat.R
 ========================================================
 
-<center>
-<img src="presentation-figure/filterCat.gif"/>
-</center>
 
+<img src="presentation-figure/filterCat.gif" width="80%" style="display: block; margin: auto;" alt="centered image"/>
+
+<br>
+<br>
 
 
 Module: mod_filterDog.R
 ========================================================
 
-<center>
-<img src="presentation-figure/filterDog.gif"/>
-</center>
 
+<img src="presentation-figure/filterDog.gif" width="80%" style="display: block; margin: auto;" alt="centered image"/>
 
-Module: Dog.R
-========================================================
-
-<center>
-<img src="presentation-figure/IMG-0408.JPG"/>
-</center>
-
+<br>
+<br>
 
 
 
@@ -260,11 +292,12 @@ Module: Dog.R
 Module: mod_colorPicker.R
 ========================================================
 
-<center>
-<img src="presentation-figure/colorPicker.gif"/>
-</center>
+
+<img src="presentation-figure/colorPicker.gif" width="80%" style="display: block; margin: auto;" alt="centered image"/>
 
 
+<br>
+<br>
 
 
 
@@ -272,11 +305,12 @@ Module: mod_colorPicker.R
 Module: mod_gear.R
 ========================================================
 
-<center>
-<img src="presentation-figure/gear.gif"/>
-</center>
+
+<img src="presentation-figure/gear.gif" width="80%" style="display: block; margin: auto;" alt="centered image"/>
 
 
+<br>
+<br>
 
 
 
@@ -297,7 +331,8 @@ Sample data: biomarker
     + tfs3b_bm2
 
 
-
+<br>
+<br>
 
 
 
@@ -305,33 +340,36 @@ Sample data: biomarker
 Module: mod_spaghetti.R
 ========================================================
 
-<center>
-<img src="presentation-figure/spaghetti.gif"/>
-</center>
+
+<img src="presentation-figure/spaghetti.gif" width="80%" style="display: block; margin: auto;" alt="centered image"/>
 
 
 
+<br>
+<br>
 
 Module: mod_long2Wide.R
 ========================================================
 
-<center>
-<img src="presentation-figure/long2Wide.gif"/>
-</center>
+
+<img src="presentation-figure/long2Wide.gif" width="80%" style="display: block; margin: auto;" alt="centered image"/>
 
 
+<br>
+<br>
 
 
 Module: mod_scatter.R
 ========================================================
 
-<center>
-<img src="presentation-figure/scatter.gif"/>
-</center>
+
+<img src="presentation-figure/scatter.gif" width="80%" style="display: block; margin: auto;" alt="centered image"/>
 
 
 
 
+<br>
+<br>
 
 
 
@@ -347,6 +385,8 @@ How can this model help programmer?
 
 
 
+<br>
+<br>
 
 Lessons and reflections
 ========================================================
