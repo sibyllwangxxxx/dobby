@@ -84,7 +84,10 @@ long2Wide <- function(input, output, session, dat = reactive(iris)){
 
 if(FALSE){
 
-  tfs <- bind_rows(tfs3b_bm2, tfs3b_bm1, nars201_bm1)
+  #tfs <- bind_rows(tfs3b_bm2, tfs3b_bm1, nars201_bm1)
+
+  #LB <- readRDS("P:/biib092ad/251ad201/dm/data/crt/20190401/RDS/LB.RDS")
+  lb <- LB %>% filter(USUBJID %in% sample(unique(LB$USUBJID), size = 10))
 
   ui<-fluidPage(
     long2WideUI("long2Wide"),
@@ -92,7 +95,7 @@ if(FALSE){
   )
 
   server<-function(input, output, session){
-    data_wide <- callModule(long2Wide, "long2Wide", dat = reactive(tfs))
+    data_wide <- callModule(long2Wide, "long2Wide", dat = reactive(lb))
 
     output$data <- renderDataTable(data_wide())
   }
