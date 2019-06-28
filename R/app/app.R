@@ -82,7 +82,7 @@ server <- function(input, output) {
   #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
   if(tool){
     output$scatterggiraphplot <- renderggiraph(ggiraph(code = print(p_scatter()$gg),
-                                                width_svg =p_scatter()$w/100,
+                                                width_svg = p_scatter()$w/100,
                                                 height_svg = p_scatter()$h/100))
   }else{
     output$p_scatter <- renderPlot(p_scatter()$p)
