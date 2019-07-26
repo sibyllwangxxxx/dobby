@@ -17,13 +17,13 @@ editTitleUI<-function(id, label="Edit plot title"){
 }
 
 
-editTitle<-function(input, output, session){
+editTitle<-function(input, output, session, val = "Default"){
 
   ns<-session$ns
 
   output$titleUI<-renderUI({
     if(isTRUE(input$edit)){
-      textInput(ns("titleIn"), "", placeholder="Type here")
+      textInput(ns("titleIn"), "", placeholder="Type here", value = val)
     }
   })
 
@@ -43,10 +43,11 @@ ui<-pageWithSidebar(headerPanel("Demo"),
 
 server<-function(input, output, session){
 
-  title_module<-callModule(editTitle, "title")
-  title<-reactive(ifelse(is.null(title_module()), "Scatterplot of horse power vs mpg in mtcars", title_module()))
+  title_default <- "Scatterplot of horse power vs mpg in mtcars"
+  title_module<-callModule(editTitle, "title", val = title_default)
+  title<-reactive(ifelse(is.null(title_module()), title_default, title_module()))
 
-  xlab_module<-callModule(editTitle, "xlab")
+  xlab_module<-callModule(editTitle, "xlab", val = "hp")
   xlab<-reactive(ifelse(is.null(xlab_module()), "hp", xlab_module()))
 
   output$plot<-renderPlot({
