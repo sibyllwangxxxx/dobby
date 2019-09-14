@@ -5,17 +5,18 @@ ui <- fluidPage(
   textInput("newname", "Type new var name", value="newvar"),
   verbatimTextOutput("txt"),
   tableOutput("tb")
-)  
+)
 
 server <- function(input, output, session) {
-  
+
   output$txt<-renderText(input$newname)
-  
+
   output$tb<-renderTable({
     library(rlang)
     iris %>% mutate(!!input$newname:=10+!!rlang::sym(input$var))
   })
-  
+
 }
 
+if(FALSE)
 shinyApp(ui, server)

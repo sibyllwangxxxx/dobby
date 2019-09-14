@@ -1,6 +1,6 @@
-source("C:/Users/bwang4/dobby/R/global.R")
-lapply(paste0("C:/Users/bwang4/dobby/R/app/ui/", list.files("C:/Users/bwang4/dobby/R/app/ui/")), source)
-lapply(paste0("C:/Users/bwang4/dobby/R/modules/", list.files("C:/Users/bwang4/dobby/R/modules/")), source)
+source(paste0(getwd(), "/R/global.R"))
+lapply(paste0(getwd(), "/R/app/ui/", list.files(paste0(getwd(), "/R/app/ui/"))), source)
+lapply(paste0(getwd(), "/R/modules/", list.files(paste0(getwd(), "/R/modules/"))), source)
 
 appFun <- function(tool = TRUE, stack = TRUE){
 
