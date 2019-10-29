@@ -63,10 +63,16 @@ colorPicker<-function(input, output, session, ncolor=3, default="black"){
 
 
 ## shiny
-if(FALSE){
+if(TRUE){
+library(shiny)
+library(shinyWidgets)
+library(shinyBS)
+
 ui<-fluidPage(
+  introjsUI(),
   titlePanel("Shiny module colorPicker demo"),
   br(),
+  actionButton("btn","Press me"),
   textOutput("palette"),
   colorPickerUI("pickcolors"),
   numericInput("num", "Number of colors", min=1, max=10, value=5),
@@ -88,6 +94,24 @@ server<-function(input, output, session){
   output$palette<-renderPrint({
     palette()
   })
+
+
+
+  steps <- reactive(data.frame(element = c(NA,
+                                           "#btn",
+                                           "#num",
+                                           "#pickcolors-pick"),
+
+                               intro = c("This is a help page",
+                                         "This is a button",
+                                         "Number of colors",
+                                         "Check to pick colors")))
+
+  observeEvent(input$btn,{
+    introjs(session, options = list(steps=steps()))
+
+  })
+
 
 }
 

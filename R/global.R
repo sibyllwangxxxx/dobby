@@ -25,7 +25,7 @@ library(haven)
 
 # source all helper files -------------------------------------------------
 
-lapply(paste0(getwd(), "/R/helpers/", list.files(paste0(getwd(), "/R/helpers/"))), source)
+#lapply(paste0(getwd(), "/R/helpers/", list.files(paste0(getwd(), "/R/helpers/"))), source)
 
 # lapply(paste0("C:/Users/bwang4/dobby/data/rds/", list.files("C:/Users/bwang4/dobby/data/rds")), readRDS) %>%
 #   setNames(., nm = str_remove(list.files("C:/Users/bwang4/dobby/data/rds"), ".RDS")) %>%
